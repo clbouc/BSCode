@@ -1,122 +1,270 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>JS弹出可拖拽可关闭的div层</title>
-    <style>
-        html, body {
-            height: 100%;
-            overflow: hidden;
-        }
+﻿<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Masonry Responsive Template</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <link rel="stylesheet" href="source/css/normalize.css">
+        <link rel="stylesheet" href="source/css/font-awesome.css">
+        <link rel="stylesheet" href="source/css/bootstrap.min.css">
+        <link rel="stylesheet" href="source/css/templatemo-style.css">
+        <script src="source/js/vendor/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <div id="loader-wrapper">
+            <div id="loader"></div>
+        </div>
 
-        body, div, h2 {
-            margin: 0;
-            padding: 0;
-        }
+        <div class="content-bg"></div>
+        <div class="bg-overlay"></div>
 
-        body {
-            font: 12px/1.5 Tahoma;
-        }
+        <!-- SITE TOP -->
+        <div class="site-top">
+            <div class="site-header clearfix">
+                <div class="container">
+                    <a href="#" class="site-brand pull-left"><strong>Masonry</strong> Free Template</a>
+                    <!--<div class="social-icons pull-right">
+                        <ul>
+                            <li><a href="#" class="fa fa-facebook"></a></li>
+                            <li><a href="#" class="fa fa-twitter"></a></li>
+                            <li><a href="#" class="fa fa-behance"></a></li>
+                            <li><a href="#" class="fa fa-dribbble"></a></li>
+                            <li><a href="#" class="fa fa-google-plus"></a></li>
+                        </ul>
+                    </div>-->
+                </div>
+            </div> <!-- .site-header -->
+            <div class="site-banner">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-offset-2 col-md-8 text-center">
+                            <h2>个人BS学习  总结</h2>
+                            <p>
+                                包括个人在学习中用到的个例，第三方插件的使用
+                            </p>
+                        </div>
+                    </div>
+                    <!--<div class="row">
+                        <form action="#" method="post" class="subscribe-form">
+                            <fieldset class="col-md-offset-4 col-md-3 col-sm-8">
+                                <input type="email" id="subscribe-email" placeholder="Enter your email...">
+                            </fieldset>
+                            <fieldset class="col-md-5 col-sm-4">
+                                <input type="submit" id="subscribe-submit" class="button white" value="Subscribe!">
+                            </fieldset>
+                        </form>
+                    </div>-->
+                </div>
+            </div> <!-- .site-banner -->
+        </div> <!-- .site-top -->
+       
+        <!-- MAIN POSTS -->
+        <div class="main-posts">
+            <div class="container">
+                <div class="row">
+                    <div class="blog-masonry masonry-true" id="main-body">
+                        <!--<div class="post-masonry col-md-4 col-sm-6">
+                            <div class="post-thumb">
+                                <img src="images/1.jpg" alt="">
+                                <div class="title-over">
+                                    <h4><a href="#">Title one goes here</a></h4>
+                                </div>
+                                <div class="post-hover text-center">
+                                    <div class="inside">
+                                        <i class="fa fa-plus"></i>
+                                        <span class="date">25 Jan 2084</span>
+                                        <h4><a href="#">Title one goes here</a></h4>
+                                        <p>Cum sociis natoque penatibus et magnis dis parturient</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="post-masonry col-md-4 col-sm-6">
+                            <div class="post-thumb">
+                                <img src="images/2.jpg" alt="">
+                                <div class="title-over">
+                                    <h4><a href="#">Second Image Title</a></h4>
+                                </div>
+                                <div class="post-hover text-center">
+                                    <div class="inside">
+                                        <i class="fa fa-plus"></i>
+                                        <span class="date">24 Jan 2084</span>
+                                        <h4><a href="#">Second Image Title</a></h4>
+                                        <p>Donec venenatis libero sapien, eu condimentum lacus</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="post-masonry col-md-4 col-sm-6">
+                            <div class="post-thumb">
+                                <img src="images/3.jpg" alt="">
+                                <div class="title-over">
+                                    <h4><a href="#">Image Number Three</a></h4>
+                                </div>
+                                <div class="post-hover text-center">
+                                    <div class="inside">
+                                        <i class="fa fa-plus"></i>
+                                        <span class="date">23 Jan 2084</span>
+                                        <h4><a href="#">Image Number Three</a></h4>
+                                        <p>Sed vitae lacus eget ipsum scelerisque condimentum</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="post-masonry col-md-4 col-sm-6">
+                            <div class="post-thumb">
+                                <img src="images/4.jpg" alt="">
+                                <div class="title-over">
+                                    <h4><a href="#">Aliquam sed magna risus</a></h4>
+                                </div>
+                                <div class="post-hover text-center">
+                                    <div class="inside">
+                                        <i class="fa fa-plus"></i>
+                                        <span class="date">22 Jan 2084</span>
+                                        <h4><a href="#">Aliquam sed magna risus</a></h4>
+                                        <p>Praesent pharetra blandit ex sed imperdiet</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="post-masonry col-md-4 col-sm-6">
+                            <div class="post-thumb">
+                                <img src="images/5.jpg" alt="">
+                                <div class="title-over">
+                                    <h4><a href="#">Lorem ipsum dolor sit</a></h4>
+                                </div>
+                                <div class="post-hover text-center">
+                                    <div class="inside">
+                                        <i class="fa fa-plus"></i>
+                                        <span class="date">21 Jan 2084</span>
+                                        <h4><a href="#">Lorem ipsum dolor sit</a></h4>
+                                        <p>Vestibulum faucibus lacus ac risus efficitur</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="post-masonry col-md-4 col-sm-6">
+                            <div class="post-thumb">
+                                <img src="images/6.jpg" alt="">
+                                <div class="title-over">
+                                    <h4><a href="#">Praesent eget lectus mauris</a></h4>
+                                </div>
+                                <div class="post-hover text-center">
+                                    <div class="inside">
+                                        <i class="fa fa-plus"></i>
+                                        <span class="date">20 Jan 2084</span>
+                                        <h4><a href="#">Praesent eget lectus mauris</a></h4>
+                                        <p>Morbi placerat pellentesque tortor, sed auctor dolor</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="post-masonry col-md-4 col-sm-6">
+                            <div class="post-thumb">
+                                <img src="images/7.jpg" alt="">
+                                <div class="title-over">
+                                    <h4><a href="#">Donec nec metus non</a></h4>
+                                </div>
+                                <div class="post-hover text-center">
+                                    <div class="inside">
+                                        <i class="fa fa-plus"></i>
+                                        <span class="date">15 Jan 2084</span>
+                                        <h4><a href="#">Donec nec metus non</a></h4>
+                                        <p>Phasellus eu sapien sagittis, sodales neque ac</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="post-masonry col-md-4 col-sm-6">
+                            <div class="post-thumb">
+                                <img src="images/8.jpg" alt="">
+                                <div class="title-over">
+                                    <h4><a href="#">Vestibulum faucibus lacus</a></h4>
+                                </div>
+                                <div class="post-hover text-center">
+                                    <div class="inside">
+                                        <i class="fa fa-plus"></i>
+                                        <span class="date">14 Jan 2084</span>
+                                        <h4><a href="#">Vestibulum faucibus lacus</a></h4>
+                                        <p>In aliquet et tellus in iaculis. Ut fermentum quis tellus</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="post-masonry col-md-4 col-sm-6">
+                            <div class="post-thumb">
+                                <img src="images/9.jpg" alt="">
+                                <div class="title-over">
+                                    <h4><a href="#">Pellentesque habitant morbi</a></h4>
+                                </div>
+                                <div class="post-hover text-center">
+                                    <div class="inside">
+                                        <i class="fa fa-plus"></i>
+                                        <span class="date">13 Jan 2084</span>
+                                        <h4><a href="#">Pellentesque habitant morbi</a></h4>
+                                        <p>Fusce ullamcorper diam vel arcu scelerisque</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>--> 
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        center {
-            padding-top: 10px;
-        }
+        <!-- FOOTER -->
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <div class="social-icons">
+                            <ul>
+                                <li><a href="#" class="fa fa-facebook"></a></li>
+                                <li><a href="#" class="fa fa-twitter"></a></li>
+                                <li><a href="#" class="fa fa-behance"></a></li>
+                                <li><a href="#" class="fa fa-dribbble"></a></li>
+                                <li><a href="#" class="fa fa-google-plus"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p class="copyright-text">Copyright &copy; 2084 Company Name 
+                    	| More Templates <a href="http://www.cssmoban.com/" target="_blank" title="页面模块来源-模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
-        button {
-            cursor: pointer;
-        }
+        <script src="source/js/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+        <script src="source/js/min/plugins.min.js"></script>
+        <script src="source/js/min/main.min.js"></script>
 
-        #win {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 400px;
-            height: 200px;
-            background: rgba(14,24,60,0.6);
-            border: 2px solid rgba(14,24,60,0.8);
-            margin: -102px 0 0 -202px;
-            display: none;
-            border-radius: 5px;
-        }
+        <!-- Preloader -->
+        <script type="text/javascript">
+            //<![CDATA[
+            $(window).load(function() { // makes sure the whole site is loaded
+                $('#loader').fadeOut(); // will first fade out the loading animation
+                    $('#loader-wrapper').delay(350).fadeOut('slow'); // will fade out the white DIV that covers the website.
+                $('body').delay(350).css({'overflow-y':'visible'});
+            })
+            //]]>
+        </script>
 
-        h2 {
-            font-size: 12px;
-            height: 18px;
-            text-align: right;
-            background: #FC0;
-            border-bottom: 3px solid #f90;
-            padding: 5px;
-            cursor: move;
-        }
+        <script type="text/javascript" src="index.js"></script>
 
-            h2 span {
-                color: #f90;
-                cursor: pointer;
-                background: #fff;
-                border: 1px solid #f90;
-                padding: 0 2px;
-                border-radius: 5px;
-            }
-    </style>
-    <script>
-        window.onload = function () {
-            var oWin = document.getElementById("win");
-            var oBtn = document.getElementsByTagName("button")[0];
-            var oClose = document.getElementById("close");
-            var oH2 = oWin.getElementsByTagName("h2")[0];
-            var bDrag = false;
-            var disX = disY = 0;
-            oBtn.onclick = function () {
-                oWin.style.display = "block"
-            };
-            oClose.onclick = function () {
-                oWin.style.display = "none"
-
-            };
-            oClose.onmousedown = function (event) {
-                (event || window.event).cancelBubble = true;
-            };
-            oH2.onmousedown = function (event) {
-                var event = event || window.event;
-                bDrag = true;
-                disX = event.clientX - oWin.offsetLeft;
-                disY = event.clientY - oWin.offsetTop;
-                this.setCapture && this.setCapture();
-                return false
-            };
-            document.onmousemove = function (event) {
-                if (!bDrag) return;
-                var event = event || window.event;
-                var iL = event.clientX - disX;
-                var iT = event.clientY - disY;
-                var maxL = document.documentElement.clientWidth - oWin.offsetWidth;
-                var maxT = document.documentElement.clientHeight - oWin.offsetHeight;
-                iL = iL < 0 ? 0 : iL;
-                iL = iL > maxL ? maxL : iL;
-                iT = iT < 0 ? 0 : iT;
-                iT = iT > maxT ? maxT : iT;
-
-                oWin.style.marginTop = oWin.style.marginLeft = 0;
-                oWin.style.left = iL + "px";
-                oWin.style.top = iT + "px";
-                return false
-            };
-            document.onmouseup = window.onblur = oH2.onlosecapture = function () {
-                bDrag = false;
-                oH2.releaseCapture && oH2.releaseCapture();
-            };
-        };
-    </script>
-</head>
-<body>
-    <div id="win"><h2><span id="close">×</span></h2></div>
-    <center><button>弹出层</button></center>
-
-    <br />
-    <br />
-    <br />
-    <br />
-    <button>here</button>
-
-</body>
+	<!-- templatemo 434 masonry -->
+    </body>
 </html>

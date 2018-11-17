@@ -33,7 +33,9 @@
     <Compile Include="app.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\users.js" />
+    <Content Include="index.html" />
     <Content Include="package.json" />
+    <Content Include="public\74-divpop.html" />
     <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
     <Content Include="views\index.pug" />
@@ -41,6 +43,9 @@
     <Content Include="views\error.pug" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Assets\" />
+    <Folder Include="ThirdParty\" />
+    <Folder Include="source\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
