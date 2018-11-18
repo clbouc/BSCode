@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8" />
+		<title>使用turf 实现 点 线 面几何体拓扑关系的判断</title>
+
+		<link rel="stylesheet" href="../../ThirdParty/leaflet/leaflet.css" />
+		<script src="../../ThirdParty/jquery-easyui-1.6.7/jquery.min.js"></script>
+		<script src="../../ThirdParty/leaflet/leaflet.js"></script>
+		<script src="../../ThirdParty/TURFjs/turf.js"></script>
+
+	</head>
+	<body>
+		<div id="map" style="width:800px; height:600px;"></div>
+		<div id='statebar' style="width: 300px; height: 200px;"></div>
+		<p>
+			leaflet 调用geojson数据，实现点、线、面 添加;
+			调用turf 判断鼠标是否在所绘制多边形内部
+		</p>
+
+		<script type='text/javascript'>
+			// 			var url =
+			// 				'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+			// 			var attr =
+			// 				' Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
+			// 
+			var map = L.map('map').setView([40, 118], 5);
+
+
+			map.on('mousemove', function(e) {
+				document.getElementById('statebar').innerHTML = /* innerHTML 属性设置或返回表格行的开始和结束标签之间的 HTML  */
+					// e.point is the x, y coordinates of the mousemove event relative
+					// to the top-left corner of the map
+					JSON.stringify(e.containerPoint) + '<br />' +
+					// e.lngLat is the longitude, latitude geographical position of the event
+					JSON.stringify(e.latlng)+
+					'<br />'+
+					mouseInPolygon([e.latlng.lat,e.latlng.lng],latlngs2)
+					; /* JSON.stringify() 方法可以将任意的 JavaScript 值序列化成 JSON 字符串 */
+					
+					
+					
+			});
+
+			var myStyle = {
+				"color": "#00f",
+				"weight": 3,
+				"opacity": 0.5,
+			};
+
+			$.getJSON('../../Assets/geojson/sheng_jjj_geo.json', function(jsonData) {
+				L.geoJSON(jsonData, {
+					style: myStyle
+
+					//style: function (feature) {//根据要素属性设置不同样式，可以制作唯一值渲染专题图等
+					//    switch (feature.properties.party) {
+					//        case 'Republican': return { color: "#ff0000" };
+					//        case 'Democrat': return { color: "#0000ff" };
+					//    }
+					//}
+
+				}).addTo(map) //绑定地图
+			});
+
+			//添加注记
+			var markers = [
+				[40, 116],
+				[41, 118],
+				[41, 117]
+			];
+			for (i = 0; i < markers.length; i++) {
+				L.marker(markers[i]).addTo(map)
+			}
+
+			//添加点
+			L.circle([40, 118], {
+				color: '#FF0000',
+				fillColor: '#FF0000',
+				radius: 1000,
+				fillOpacity: 0.1
+			}).addTo(map);
+
+			//绘制线
+			var latlngs = [
+				[40, 116],
+				[41, 118],
+				[41, 117],
+				[40.5, 116]
+			];
+			var polyline = L.polyline(latlngs, {
+				color: 'red'
+			}).addTo(map);
+
+			//绘制面
+			var latlngs2 = [
+				[40, 116],
+				[41, 118],
+				[41, 117],
+				[40.5, 116],
+				[40, 116]
+			];
+			var polygon = L.polygon(latlngs2, {
+				color: '#000eff',
+				fillColor: '#0000ed',
+				weight: 1
+			}).addTo(map);
+
+			//绘制弹出框
+			var popup = L.popup()
+				.setLatLng([40, 116])
+				.setContent('<p>Hello world!<br />This is a nice popup.</p>')
+				.openOn(map);
+				
+				function mouseInPolygon(point,polygon){
+					var poly1=turf.polygon([polygon]);
+					var pt1=turf.point(point);
+					
+					return turf.booleanPointInPolygon(pt1,poly1);
+
+				}
+		</script>
+
+	</body>
+</html>
