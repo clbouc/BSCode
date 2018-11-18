@@ -39,20 +39,38 @@
             border-radius: 5px;
         }
 
+        #win2 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 200px;
+            background: rgba(8,24,50,0.6);
+            border: 2px solid rgba(8,24,50,0.8);
+            margin: -102px 0 0 -202px;
+            display: none;
+            border-radius: 5px;
+        }
+
         h2 {
+            /*position:absolute;
+            left:10px;*/
+            color:#fff;
             font-size: 12px;
             height: 18px;
             text-align: right;
-            background: #FC0;
-            border-bottom: 3px solid #f90;
+            background: rgba(14,24,60,0.8);
+            border-bottom: 3px solid rgba(14,24,60,0.6);
             padding: 5px;
             cursor: move;
         }
 
-            h2 span {
-                color: #f90;
+            h2 span.close {
+                /*position:absolute;
+                right:5px;*/
+                color: #fff;
                 cursor: pointer;
-                background: #fff;
+                background: rgba(14,24,60,0.6);
                 border: 1px solid #f90;
                 padding: 0 2px;
                 border-radius: 5px;
@@ -109,7 +127,9 @@
     </script>
 </head>
 <body>
-    <div id="win"><h2><span id="close">×</span></h2></div>
+    <div id="win">
+        <h2><span id="close" class="close">×</span></h2>
+    </div>
     <center><button>弹出层</button></center>
 
     <br />
