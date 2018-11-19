@@ -142,6 +142,8 @@
     <Compile Include="ThirdParty\jquery-easyui-1.6.7\src\jquery.slider.js" />
     <Compile Include="ThirdParty\jquery-easyui-1.6.7\src\jquery.tabs.js" />
     <Compile Include="ThirdParty\jquery-easyui-1.6.7\src\jquery.window.js" />
+    <Compile Include="ThirdParty\knockout\knockout-3.4.2.js" />
+    <Compile Include="ThirdParty\knockout\knockout-3.5.0rc.debug.js" />
     <Compile Include="ThirdParty\leaflet\leaflet-src.esm.js" />
     <Compile Include="ThirdParty\leaflet\leaflet-src.js" />
     <Compile Include="ThirdParty\leaflet\leaflet.js" />
@@ -174,9 +176,14 @@
     <Compile Include="ThirdParty\zTree_v3\js\jquery.ztree.exhide.min.js" />
     <Content Include="index.html" />
     <Content Include="package.json" />
-    <Content Include="public\gis\truf.html" />
-    <Content Include="public\html\101-divpop.html" />
-    <Content Include="README.md" />
+    <Content Include="public\models\gis\turf.html" />
+    <Content Include="public\models\html\101-divpop.html" />
+    <Content Include="public\models\html\102-konckout-databind.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="README.md">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="source\css\bootstrap.min.css" />
     <Content Include="source\css\font-awesome.css" />
     <Content Include="source\css\normalize.css" />
@@ -1524,11 +1531,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\" />
-    <Folder Include="public\bootstrap\" />
-    <Folder Include="public\cesium\" />
-    <Folder Include="public\echarts\" />
-    <Folder Include="public\gis\" />
-    <Folder Include="public\html\" />
+    <Folder Include="public\models\" />
+    <Folder Include="public\models\bootstrap\" />
+    <Folder Include="public\models\cesium\" />
+    <Folder Include="public\models\echarts\" />
+    <Folder Include="public\models\gis\" />
+    <Folder Include="public\models\html\" />
     <Folder Include="source\css\" />
     <Folder Include="source\fonts\" />
     <Folder Include="source\js\" />
@@ -1628,6 +1636,7 @@
     <Folder Include="ThirdParty\jquery-easyui-1.6.7\themes\material\images\" />
     <Folder Include="ThirdParty\jquery-easyui-1.6.7\themes\metro\" />
     <Folder Include="ThirdParty\jquery-easyui-1.6.7\themes\metro\images\" />
+    <Folder Include="ThirdParty\knockout\" />
     <Folder Include="ThirdParty\leaflet\" />
     <Folder Include="ThirdParty\leaflet\images\" />
     <Folder Include="ThirdParty\requirejs-2.1.20\" />

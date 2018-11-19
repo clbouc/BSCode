@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -38,6 +38,39 @@
             display: none;
             border-radius: 5px;
         }
+		
+		.cpopwindow{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 400px;
+			height: 200px;
+			background: rgba(8,24,50,0.6);
+			border: 2px solid rgba(8,24,50,0.8);
+			margin: -102px 0 0 -202px;
+			display: none;
+			border-radius: 5px;
+		}
+		.cpopwindow h2{
+			color:#fff;
+			font-size: 12px;
+			height: 18px;
+			text-align: right;
+			background: rgba(14,24,60,0.8);
+			border-bottom: 3px solid rgba(14,24,60,0.6);
+			padding: 5px;
+			cursor: move;
+		}
+		.cpopwindow h2 span.close {
+                /*position:absolute;
+                right:5px;*/
+                color: #fff;
+                cursor: pointer;
+                background: rgba(14,24,60,0.6);
+                border: 1px solid #f90;
+                padding: 0 2px;
+                border-radius: 5px;
+            }
 
         #win2 {
             position: absolute;
@@ -78,18 +111,20 @@
     </style>
     <script>
         window.onload = function () {
-            var oWin = document.getElementById("win");
+            
             var oBtn = document.getElementsByTagName("button")[0];
+			oBtn.onclick = function () {
+				oWin.style.display = "block"
+			};
+			
+			var oWin = document.getElementById("win");
             var oClose = document.getElementById("close");
             var oH2 = oWin.getElementsByTagName("h2")[0];
             var bDrag = false;
             var disX = disY = 0;
-            oBtn.onclick = function () {
-                oWin.style.display = "block"
-            };
+            
             oClose.onclick = function () {
                 oWin.style.display = "none"
-
             };
             oClose.onmousedown = function (event) {
                 (event || window.event).cancelBubble = true;
@@ -125,6 +160,15 @@
             };
         };
     </script>
+	<script>
+		
+		function popModel(option){
+		   	this.name=option.name;
+			this.id=option.id;
+		}
+		
+		
+	</script>
 </head>
 <body>
     <div id="win">
