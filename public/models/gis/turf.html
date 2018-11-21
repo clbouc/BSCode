@@ -34,13 +34,12 @@
 					// to the top-left corner of the map
 					JSON.stringify(e.containerPoint) + '<br />' +
 					// e.lngLat is the longitude, latitude geographical position of the event
-					JSON.stringify(e.latlng)+
-					'<br />'+
-					mouseInPolygon([e.latlng.lat,e.latlng.lng],latlngs2)
-					; /* JSON.stringify() 方法可以将任意的 JavaScript 值序列化成 JSON 字符串 */
-					
-					
-					
+					JSON.stringify(e.latlng) +
+					'<br />' +
+					mouseInPolygon([e.latlng.lat, e.latlng.lng], latlngs2); /* JSON.stringify() 方法可以将任意的 JavaScript 值序列化成 JSON 字符串 */
+
+
+
 			});
 
 			var myStyle = {
@@ -111,14 +110,74 @@
 				.setLatLng([40, 116])
 				.setContent('<p>Hello world!<br />This is a nice popup.</p>')
 				.openOn(map);
-				
-				function mouseInPolygon(point,polygon){
-					var poly1=turf.polygon([polygon]);
-					var pt1=turf.point(point);
-					
-					return turf.booleanPointInPolygon(pt1,poly1);
 
+			function mouseInPolygon(point, polygon) {
+				var poly1 = turf.polygon([polygon]);
+				var pt1 = turf.point(point);
+
+				return turf.booleanPointInPolygon(pt1, poly1);
+
+			}
+
+			var sampleData = { /* addSource()函数添加资源,资源ID是route */
+// 				"type": "geojson",
+// 				"data": { /* GeoJSON格式数据 */
+					"type": "Feature",
+					"properties": {},
+					"geometry": {
+						"type": "LineString",
+						"coordinates": [
+							[116.7,40.3],
+							[117.0,41.2],
+							[117.1,39.8],
+							[118.3,37.2],
+							[116.5,38.8]
+						]
+					}
+				// },
+			};
+			
+			
+
+			var buffered = turf.buffer(sampleData, 5, {
+				units:'kilometers'// 'miles'
+			});
+			var polygon2 = L.geoJSON(buffered, {
+				style: function(feature) {
+					return {
+						color: 'red'
+					};
 				}
+			}).addTo(map);
+			
+			
+			var poly=turf.polygon([[[117.1,40.5],[115.3,41.2],[118.2,41.3],[118.4,40.3],[117.1,40.5]]]);
+			var clipped=turf.difference(poly,buffered);
+			
+			var polygon3 = L.geoJSON(clipped, {
+				style: function(feature) {
+					return {
+						color: 'green'
+					};
+				}
+			}).addTo(map);
+			
+			
+			
+// 			var poly0011 = turf.polygon([[[0,0],[0,5],[5,5],[5,0],[0,0]]]);
+// 			var poly0012 = turf.polygon([[[1,1],[1,6],[6,6],[6,1],[1,1]]]);
+// 			var poly0013 = turf.polygon([[[10,10],[10,15],[15,15],[15,10],[10,10]]]);
+			
+			var intered=turf.intersect(poly, buffered);
+			
+			var polygon4 = L.geoJSON(intered, {
+				style: function(feature) {
+					return {
+						color: 'blue'
+					};
+				}
+			}).addTo(map);
+			
 		</script>
 
 	</body>
