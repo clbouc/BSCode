@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ztree 树控件的封装调用测试</title>
+
+		<link rel="stylesheet" href="../../../ThirdParty/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+		<script type="text/javascript" src="../../../ThirdParty/jquery-easyui-1.6.7/jquery.min.js"></script>
+		<script type="text/javascript" src="../../../ThirdParty/zTree_v3/js/jquery.ztree.all.js"></script>
+
+
+
+	</head>
+
+	<div class="zTreeDemoBackground left">
+		<ul id="treeDemo" class="ztree ztreeAccord"></ul>
+	</div>
+
+	<div class="zTreeDemoBackground left">
+		<ul id="treeDemo2" class="ztree"></ul>
+	</div>
+
+
+	<input type="button" id="btn_addnode" value="添加节点"></input>
+	<input type="button" id="btn_check" value="复选框"></input>
+	<input type="button" id="btn_radio" value="单选框"></input>
+	<input type="button" id="btn_remove_show" value="显示移除节点"></input>
+	<input type="button" id="btn_remove_hide" value="隐藏移除节点"></input>
+
+	<script type="text/javascript">
+		/**
+		 * 自定义树结构 引用ztree  
+		 * 需引用样式文件 zTree_v3/css/zTreeStyle/zTreeStyle.css
+		 * jquery.min.js
+		 * zTree_v3/js/jquery.ztree.all.js
+		 */
+		function CustomZtree(treeid) {
+			this.treeid = treeid;
+			this.treeObj = null;
+			this.curMenu = null;
+			this._zNodes = null;
+			this._setting = {
+				view: {
+					showLine: false,
+					selectedMulti: false,
+					dblClickExpand: false
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				},
+				callback: {
+					onNodeCreated: this.onNodeCreated,
+					beforeClick: this.beforeClick,
+					onClick: this.onClick
+				},
+				check: {
+					enable: false,
+					chkStyle: "check", //radio
+					radioType: "level"
+				},
+				edit: {
+					enable: false,
+					showRemoveBtn: true,
+					showRenameBtn: true,
+					removeTitle: '移除',
+					renameTitle: '重命名'
+				}
+			};
+			// 			this.onNodeCreated;
+			// 			this.beforeClick;
+			// 			this.onClick;
+		}
+
+		Object.defineProperties(CustomZtree.prototype, {
+			zNodes: {
+				get: function() {
+					return this._zNodes;
+				},
+				set: function(value) {
+					this._zNodes = value;
+					//刷新树
+				}
+			},
+			setting: {
+				get: function() {
+					return this._setting;
+				},
+				set: function(value) {
+					this._setting = value;
+					//设置树令设置生效
+				}
+			}
+		});
+
+		/**
+		 * 展开树节点的第一层且关闭其他节点
+		 */
+		CustomZtree.prototype.openFirstTreenode = function(node) {
+			/* 获取所有树节点 */
+			var nodes = this.treeObj.transformToArray(this.treeObj.getNodes());
+
+
+			for (var i = 0; i < nodes.length; i++) {
+				this.treeObj.expandNode(nodes[i], false);
+			}
+			//展开第一级节点
+			//this.treeObj.expandNode(nodes[0], true); //第二个参数为true证明是展开
+
+			if (node.level == 0) {
+				this.treeObj.expandNode(node, true);
+			}
+
+		}
+
+
+		/**
+		 * 树结构初始化
+		 */
+		CustomZtree.prototype.init = function() {
+
+			$.fn.zTree.init($("#" + this.treeid), this.setting, this.zNodes);
+			this.treeObj = $.fn.zTree.getZTreeObj(this.treeid);
+
+			this.curMenu = this.treeObj.getNodes()[0].children[0]; //.children[0];
+			this.treeObj.selectNode(this.curMenu);
+			var a = $("#" + this.treeObj.getNodes()[0].tId + "_a");
+			a.addClass("cur");
+		};
+
+		/**
+		 * 开始编辑
+		 */
+		CustomZtree.prototype.editstart = function() {
+			this.treeObj.setting.edit.enable = true;
+			this.treeObj.setting.edit.showRemoveBtn = true;
+			this.treeObj.setting.edit.showRenameBtn = true;
+		}
+
+		/**
+		 * 结束编辑
+		 */
+		CustomZtree.prototype.editend = function() {
+			this.treeObj.setting.edit.enable = false;
+		}
+
+		/**
+		 * 添加节点
+		 */
+		CustomZtree.prototype.addNodes = function(newNodes) {
+			this.treeObj.addNodes(null, newNodes);
+		}
+	</script>
+
+
+	<script>
+		var curTree = new CustomZtree('treeDemo');
+		curTree.zNodes = [{
+			name: "父节点1",
+			id: '1-1',
+			open: true,
+			children: [{
+					name: "子节点1",
+					id: 11,
+					pId: '1-1',
+					icon: "../../../ThirdParty/zTree_v3/css/zTreeStyle/img/diy/2.png",
+					checked: true,
+					enable: true,
+
+					children: [{
+							id: 111,
+							pId: 11,
+							name: '子节点1-1'
+						},
+						{
+							name: '子节点1-2',
+							id: 111 - 1,
+							pId: 111,
+							children: [{
+									name: '子节点1-1-1'
+								},
+								{
+									name: '子节点1-1-2'
+								}
+							]
+						}
+					]
+				},
+				{
+					name: "子节点2",
+					children: [{
+							name: '子节点2-1'
+						},
+						{
+							name: '子节点2-2'
+						}
+					]
+				}
+			]
+		}, {
+			name: "父节点2",
+			id: 2,
+			//pId:'1-1',
+			children: [{
+					name: "子节点1"
+				},
+				{
+					name: "子节点2"
+				}
+			]
+		}];
+
+		curTree.init();
+		curTree.treeObj.setting.callback.beforeClick = function(treeId, node) {
+// 			if (node.level == 0) {
+// 				curTree.treeObj.expandNode(node, !node.open);
+// 			}
+			
+			curTree.openFirstTreenode(node);
+		};
+
+
+
+		var curTree2 = new CustomZtree('treeDemo2');
+		curTree2._zNodes = curTree.zNodes;
+		curTree2.init();
+
+		$('#btn_addnode').click(function() {
+			curTree.addNodes({
+				name: '你好'
+			});
+		});
+
+		$('#btn_check').click(function() {
+			curTree.treeObj.setting.check.enable = true;
+			curTree.treeObj.setting.check.chkStyle = 'check';
+		});
+
+		$('#btn_radio').click(function() {
+			curTree.treeObj.setting.check.enable = true;
+			curTree.treeObj.setting.check.chkStyle = 'radio';
+		});
+
+		$('#btn_remove_show').click(function() {
+			curTree.editstart();
+		});
+
+		$('#btn_remove_hide').click(function() {
+			curTree.editend();
+		});
+	</script>
+
+	<body>
+	</body>
+</html>
