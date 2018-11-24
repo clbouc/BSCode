@@ -71,13 +71,13 @@
 
 			ko.applyBindings(myViewModel, document.getElementById('nameDiv'));
 
-			
+
 			var viewModel2 = {
 				firstName: ko.observable("Planet"),
 				lastName: ko.observable("Earth")
 			};
-			
-			
+
+
 			viewModel2.fullName = ko.dependentObservable({
 
 				read: function() {
@@ -93,8 +93,7 @@
 				},
 				owner: viewModel2
 			});
-			ko.applyBindings(viewModel2,document.getElementById('allNameDiv'));
-			
+			ko.applyBindings(viewModel2, document.getElementById('allNameDiv'));
 		</script>
 
 
@@ -109,6 +108,89 @@
 			ko.applyBindings(viewModel3, document.getElementById('test03'));
 
 			viewModel3.myValues.push("some value"); // Now visible
+		</script>
+
+	
+		<div id='test_002'>
+			You've clicked
+			<span data-bind="text: numberOfClicks">
+			</span>
+			times
+			<button data-bind="click: incrementClickCounter">
+				Click me
+			</button>
+		</div>
+
+		<script type="text/javascript">
+			var viewModel = {
+				numberOfClicks: ko.observable(0),
+				incrementClickCounter: function() {
+					var previousCount = this.numberOfClicks();
+					this.numberOfClicks(previousCount + 1);
+				}
+			};
+
+			ko.applyBindings(viewModel, document.getElementById('test_002'));
+		</script>
+
+
+		<div id='test_003'>
+			此示例为封装函数的双向绑定测试：
+			<button data-bind="event:{click: incrementClickCounter}">
+				点击加1
+			</button>
+
+			<span data-bind="text:_num">0
+			</span>
+
+		</div>
+
+		<script type="text/javascript">
+			function NumRecord(container) {
+				this._num = ko.observable(0);
+
+				if (typeof container == 'string') {
+					container = document.getElementById(container)
+				} else {
+					container = document.createElement('div');
+					//container.setAttribute('class', 'group draw-style-control');
+					//container.setAttribute('data-bind', 'visible:visible');
+					container.style = "display:block";
+					container.innerHTML =
+						'<button data-bind="click: incrementClickCounter">点击加1</button><span data-bind="text:num"></span>';
+				}
+				this.container = container;
+				this.init();
+			}
+
+			Object.defineProperties(NumRecord.prototype, {
+				num: {
+					get: function() {
+						return this._num();
+					},
+					set: function(value) {
+						if (value != this._num()) {
+							this._num(value);
+
+						}
+					}
+				}
+			});
+
+			NumRecord.prototype.init = function() {
+				ko.applyBindings(this, this.container);
+			}
+
+			NumRecord.prototype.incrementClickCounter = function() {
+				this.num += 1;
+				// 				var ss=this.num();
+				// 				this.num(ss+1);
+			}
+
+
+			var numRecord = new NumRecord('test_003');
+
+			//ko.applyBindings(numRecord, document.getElementById('test_003'));
 		</script>
 
 

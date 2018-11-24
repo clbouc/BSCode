@@ -1,0 +1,28 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+<meta charset="utf-8">  
+<title>测试</title>  
+<head>  
+<body>  
+<input name="按钮" type="button" onClick="clic()" value="按钮"></input>  
+<div id="content"></div>  
+<script type="text/javascript">  
+clic();  
+function clic(){  
+var bs = document.getElementsByTagName("input");  
+for(var i=0;i<bs.length;i++){  
+    var b = bs[i];  
+    b.setAttribute("aaa",i);  
+    b.onclick = function(){  
+      var s = confirm("我是"+this.getAttribute("aaa")+"号按钮,是否生成新按钮");  
+      if(s){  
+          document.getElementById("content").innerHTML += "</br><input name=\"按钮\" type=\"button\" onClick=\"clic()\" value=\"按钮\"><\/input>";  
+          clic();  
+      }  
+    };  
+}  
+}  
+</script>  
+</body>  
+</html>   

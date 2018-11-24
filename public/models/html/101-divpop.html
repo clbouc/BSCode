@@ -1,186 +1,450 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>JS弹出可拖拽可关闭的div层</title>
-    <style>
-        html, body {
-            height: 100%;
-            overflow: hidden;
-        }
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>JS弹出可拖拽可关闭的div层</title>
+		<style>
+			html,
+			body {
+				height: 100%;
+				overflow: hidden;
+			}
 
-        body, div, h2 {
-            margin: 0;
-            padding: 0;
-        }
+			body,
+			div,
+			h2 {
+				margin: 0;
+				padding: 0;
+			}
 
-        body {
-            font: 12px/1.5 Tahoma;
-        }
+			body {
+				font: 12px/1.5 Tahoma;
+			}
 
-        center {
-            padding-top: 10px;
-        }
+			center {
+				padding-top: 10px;
+			}
 
-        button {
-            cursor: pointer;
-        }
+			button {
+				cursor: pointer;
+			}
 
-        #win {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 400px;
-            height: 200px;
-            background: rgba(14,24,60,0.6);
-            border: 2px solid rgba(14,24,60,0.8);
-            margin: -102px 0 0 -202px;
-            display: none;
-            border-radius: 5px;
-        }
-		
-		.cpopwindow{
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			width: 400px;
-			height: 200px;
-			background: rgba(8,24,50,0.6);
-			border: 2px solid rgba(8,24,50,0.8);
-			margin: -102px 0 0 -202px;
-			display: none;
-			border-radius: 5px;
-		}
-		.cpopwindow h2{
-			color:#fff;
-			font-size: 12px;
-			height: 18px;
-			text-align: right;
-			background: rgba(14,24,60,0.8);
-			border-bottom: 3px solid rgba(14,24,60,0.6);
-			padding: 5px;
-			cursor: move;
-		}
-		.cpopwindow h2 span.close {
-                /*position:absolute;
+			#win {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				width: 400px;
+				height: 200px;
+				background: rgba(14, 24, 60, 0.6);
+				border: 2px solid rgba(14, 24, 60, 0.8);
+				margin: -102px 0 0 -202px;
+				display: none;
+				border-radius: 5px;
+			}
+
+			.cpopwindow {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				width: 400px;
+				height: 200px;
+				background: rgba(8, 24, 50, 0.6);
+				border: 2px solid rgba(8, 24, 50, 0.8);
+				margin: -102px 0 0 -202px;
+				display: none;
+				border-radius: 5px;
+			}
+
+			.cpopwindow h2 {
+				color: #fff;
+				font-size: 12px;
+				height: 18px;
+				text-align: right;
+				background: rgba(14, 24, 60, 0.8);
+				border-bottom: 3px solid rgba(14, 24, 60, 0.6);
+				padding: 5px;
+				cursor: move;
+			}
+
+			.cpopwindow h2 span.close {
+				/*position:absolute;
                 right:5px;*/
-                color: #fff;
-                cursor: pointer;
-                background: rgba(14,24,60,0.6);
-                border: 1px solid #f90;
-                padding: 0 2px;
-                border-radius: 5px;
-            }
+				color: #fff;
+				cursor: pointer;
+				background: rgba(14, 24, 60, 0.6);
+				border: 1px solid #f90;
+				padding: 0 2px;
+				border-radius: 5px;
+			}
 
-        #win2 {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 400px;
-            height: 200px;
-            background: rgba(8,24,50,0.6);
-            border: 2px solid rgba(8,24,50,0.8);
-            margin: -102px 0 0 -202px;
-            display: none;
-            border-radius: 5px;
-        }
+			.cunstompopwin {
+				position: absolute;
+				/* top: 50%;
+				left: 50%;
+				width: 400px;
+				height: 200px; */
+				background: rgba(8, 24, 50, 0.6);
+				border: 2px solid rgba(8, 24, 50, 0.8);
+				margin: -102px 0 0 -202px;
+				display: none;
+				border-radius: 5px;
+			}
 
-        h2 {
-            /*position:absolute;
+			.cunstompopwin h2 {
+				/*position:absolute;
             left:10px;*/
-            color:#fff;
-            font-size: 12px;
-            height: 18px;
-            text-align: right;
-            background: rgba(14,24,60,0.8);
-            border-bottom: 3px solid rgba(14,24,60,0.6);
-            padding: 5px;
-            cursor: move;
-        }
+				color: #fff;
+				font-size: 12px;
+				height: 18px;
+				text-align: left;
+				background: rgba(14, 24, 60, 0.8);
+				border-bottom: 3px solid rgba(14, 24, 60, 0.6);
+				padding: 5px;
+				cursor: move;
+			}
 
-            h2 span.close {
-                /*position:absolute;
-                right:5px;*/
-                color: #fff;
-                cursor: pointer;
-                background: rgba(14,24,60,0.6);
-                border: 1px solid #f90;
-                padding: 0 2px;
-                border-radius: 5px;
-            }
-    </style>
-    <script>
-        window.onload = function () {
-            
-            var oBtn = document.getElementsByTagName("button")[0];
-			oBtn.onclick = function () {
-				oWin.style.display = "block"
+			.cunstompopwin h2 span.close {
+				position: absolute;
+				right: 5px;
+				color: #fff;
+				cursor: pointer;
+				background: rgba(14, 24, 60, 0.6);
+				border: 1px solid #f90;
+				padding: 0 2px;
+				border-radius: 5px;
+			}
+		</style>
+
+		<script src="../../../ThirdParty/jquery-easyui-1.6.7/jquery.min.js"></script>
+		<script src="../../../ThirdParty/knockout/knockout-3.4.2.js"></script>
+
+		<script>
+			window.onload = function() {
+
+				var oBtn = document.getElementsByTagName("button")[0];
+				oBtn.onclick = function() {
+					oWin.style.display = "block"
+				};
+
+				var oWin = document.getElementById("win");
+				var oClose = document.getElementById("close");
+				var oH2 = oWin.getElementsByTagName("h2")[0];
+				var bDrag = false;
+				var disX = disY = 0;
+
+				oClose.onclick = function() {
+					oWin.style.display = "none"
+				};
+				oClose.onmousedown = function(event) {
+					(event || window.event).cancelBubble = true;
+				};
+				oH2.onmousedown = function(event) {
+					var event = event || window.event;
+					bDrag = true;
+					disX = event.clientX - oWin.offsetLeft;
+					disY = event.clientY - oWin.offsetTop;
+					this.setCapture && this.setCapture();
+					return false
+				};
+				document.onmousemove = function(event) {
+					if (!bDrag) return;
+					var event = event || window.event;
+					var iL = event.clientX - disX;
+					var iT = event.clientY - disY;
+					var maxL = document.documentElement.clientWidth - oWin.offsetWidth;
+					var maxT = document.documentElement.clientHeight - oWin.offsetHeight;
+					iL = iL < 0 ? 0 : iL;
+					iL = iL > maxL ? maxL : iL;
+					iT = iT < 0 ? 0 : iT;
+					iT = iT > maxT ? maxT : iT;
+
+					oWin.style.marginTop = oWin.style.marginLeft = 0;
+					oWin.style.left = iL + "px";
+					oWin.style.top = iT + "px";
+					return false
+				};
+				document.onmouseup = window.onblur = oH2.onlosecapture = function() {
+					bDrag = false;
+					oH2.releaseCapture && oH2.releaseCapture();
+				};
 			};
-			
-			var oWin = document.getElementById("win");
-            var oClose = document.getElementById("close");
-            var oH2 = oWin.getElementsByTagName("h2")[0];
-            var bDrag = false;
-            var disX = disY = 0;
-            
-            oClose.onclick = function () {
-                oWin.style.display = "none"
-            };
-            oClose.onmousedown = function (event) {
-                (event || window.event).cancelBubble = true;
-            };
-            oH2.onmousedown = function (event) {
-                var event = event || window.event;
-                bDrag = true;
-                disX = event.clientX - oWin.offsetLeft;
-                disY = event.clientY - oWin.offsetTop;
-                this.setCapture && this.setCapture();
-                return false
-            };
-            document.onmousemove = function (event) {
-                if (!bDrag) return;
-                var event = event || window.event;
-                var iL = event.clientX - disX;
-                var iT = event.clientY - disY;
-                var maxL = document.documentElement.clientWidth - oWin.offsetWidth;
-                var maxT = document.documentElement.clientHeight - oWin.offsetHeight;
-                iL = iL < 0 ? 0 : iL;
-                iL = iL > maxL ? maxL : iL;
-                iT = iT < 0 ? 0 : iT;
-                iT = iT > maxT ? maxT : iT;
+		</script>
 
-                oWin.style.marginTop = oWin.style.marginLeft = 0;
-                oWin.style.left = iL + "px";
-                oWin.style.top = iT + "px";
-                return false
-            };
-            document.onmouseup = window.onblur = oH2.onlosecapture = function () {
-                bDrag = false;
-                oH2.releaseCapture && oH2.releaseCapture();
-            };
-        };
-    </script>
-	<script>
-		
-		function popModel(option){
-		   	this.name=option.name;
-			this.id=option.id;
-		}
-		
-		
-	</script>
-</head>
-<body>
-    <div id="win">
-        <h2><span id="close" class="close">×</span></h2>
-    </div>
-    <center><button>弹出层</button></center>
+	</head>
+	<body>
+		<div id="win" class="cpopwindow">
+			<h2><span id="close" class="close">×</span></h2>
+		</div>
+		<center><button>弹出层</button></center>
 
-    <br />
-    <br />
-    <br />
-    <br />
-    <button>here</button>
+		<button id='btn_createNew'>新创建</button>
 
-</body>
+		<button id='btn_addContent'>动态添加按钮</button>
+		
+
+		<script>
+			/**
+			 *功能：使给定的元素dragObj成为可拖动的组件,并实现当窗体大小改变时保证组件始终在窗口可见范围内
+			 *@param {HTMLElement}dragBarObj 鼠标在此元素按下按键时开始拖动
+			 *@param {HTMLElement}dragObj 实际拖动的的元素
+			 *@memberof MeteoLib.Widgets
+			 */
+			function dragable(dragBarObj, dragObj) {
+				dragBarObj.style.cursor = "move";
+				dragBarObj.style['pointer-events'] = 'unset';
+				var obj = dragObj;
+				var x; //鼠标的初始位置
+				var y;
+				var ox; //要移动的div对象的位置
+				var oy;
+				var flag = false; //判断鼠标此时是否处于按下的状态
+				var disX = disY = 0;
+
+				function mouse_down(obj) {
+
+					document.body.style.cursor = "move";
+					ox = obj.style.left;
+					oy = obj.style.top;
+					if (!ox) {
+						ox = obj.offsetLeft
+					}
+					if (!oy) {
+						oy = obj.offsetTop;
+					}
+
+					x = window.event.clientX;
+					y = window.event.clientY;
+					flag = true;
+
+					disX = window.event.clientX - obj.offsetLeft;
+					disY = window.event.clientY - obj.offsetTop;
+				}
+
+				function mouse_move(obj) {
+					var xx = window.event.clientX; //鼠标现在的位置
+					var yy = window.event.clientY;
+
+					if (flag) {
+
+						var iL = window.event.clientX - disX;
+						var iT = window.event.clientY - disY;
+						var maxL = document.documentElement.clientWidth - obj.offsetWidth;
+						var maxT = document.documentElement.clientHeight - obj.offsetHeight;
+						iL = iL < 0 ? 0 : iL;
+						iL = iL > maxL ? maxL : iL;
+						iT = iT < 0 ? 0 : iT;
+						iT = iT > maxT ? maxT : iT;
+						obj.style.left = iL + "px";
+						obj.style.top = iT + "px";
+						obj.style.marginTop = obj.style.marginLeft = 0;
+
+						//obj.style.left = parseInt(ox) + parseInt(xx) - parseInt(x) + "px";
+						//obj.style.top = parseInt(oy) + parseInt(yy) - parseInt(y) + "px";
+
+						obj.style.bottom = "unset";
+						obj.style.right = "unset";
+					}
+				}
+
+				function mouse_up(obj) {
+					var xx = window.event.clientX; //鼠标现在的位置
+					var yy = window.event.clientY;
+					if (flag) {
+
+						var iL = window.event.clientX - disX;
+						var iT = window.event.clientY - disY;
+
+						var maxL = document.documentElement.clientWidth - obj.offsetWidth;
+						var maxT = document.documentElement.clientHeight - obj.offsetHeight;
+						iL = iL < 0 ? 0 : iL;
+						iL = iL > maxL ? maxL : iL;
+						iT = iT < 0 ? 0 : iT;
+						iT = iT > maxT ? maxT : iT;
+						obj.style.left = iL + "px";
+						obj.style.top = iT + "px";
+						obj.style.marginTop = obj.style.marginLeft = 0;
+
+						// 						obj.style.left = parseInt(ox) + parseInt(xx) - parseInt(x) + "px";
+						// 						obj.style.top = parseInt(oy) + parseInt(yy) - parseInt(y) + "px";
+
+						x = xx;
+						y = yy;
+						document.body.style.cursor = "default";
+						flag = false;
+					}
+				}
+
+				dragBarObj.addEventListener('mousedown', function(e) {
+					mouse_down(obj)
+					e.preventDefault();
+				});
+				document.body.addEventListener('mousemove', function(e) {
+					if (flag) {
+						mouse_move(obj);
+						e.preventDefault();
+					}
+				})
+				document.body.addEventListener('mouseup', function(e) {
+					if (flag) {
+						mouse_up(obj);
+						e.preventDefault();
+					}
+				})
+
+				window.addEventListener('resize', function() {
+					if (obj.style.right == 'unset') {
+						var right = obj.offsetLeft + obj.clientWidth;
+						if (right >= document.body.clientWidth) {
+							obj.style.left = (document.body.clientWidth - obj.clientWidth) + 'px'
+						}
+					}
+					if (obj.style.bottom == 'unset') {
+						var bottom = obj.offsetTop + obj.clientHeight;
+						if (bottom >= document.body.clientHeight) {
+							obj.style.top = (document.body.clientHeight - obj.clientHeight) + 'px'
+						}
+					}
+				})
+			}
+
+			function addEvent(el, type, fn) {
+				if (el.addEventListener) {
+					el.addEventListener(type, fn, false)
+				} else if (el.attachEvent()) {
+					el.attachEvent('on' + type, fn, false)
+				} else {
+					return false
+				}
+			}
+
+			function popWindow(option) {
+				this.option = option;
+				this.name = option.name;
+				//this.id=option.id;
+				this.basewindow = null;
+			}
+
+			popWindow.prototype.init = function() {
+				var that = this;
+
+				that.basewindow = document.createElement('div');
+				that.basewindow.classList.add("cunstompopwin");
+
+				if (that.option.height) {
+					that.basewindow.style.height = that.option.height + 'px';
+				} else {
+					that.basewindow.style.height = 200 + 'px';
+				}
+
+				if (that.option.width) {
+					that.basewindow.style.width = that.option.width + 'px';
+				} else {
+					that.basewindow.style.width = 300 + 'px';
+				}
+
+				//.clientHeight clientWidth
+				// var topE = parseInt((window.innerHeight - parseInt(that.basewindow.style.height.replace('px', ''))) / 2);
+				// var leftE = parseInt((window.innerWidth - parseInt(that.basewindow.style.width.replace('px', ''))) / 2)
+				// that.basewindow.style.top = topE + 'px';
+				// that.basewindow.style.left = leftE + 'px';
+
+
+				var d = document.documentElement,
+					b = document.body,
+					w = window;
+				var viewPort = {
+					left: 0,
+					top: 0,
+					width: 0,
+					height: 0
+				};
+				viewPort.top = b.scrollTop || d.scrollTop;
+				viewPort.left = b.scrollLeft || d.scrollLeft;
+				viewPort.height = w.innerHeight || d.clientHeight || b.clientHeight;
+				viewPort.width = w.innerWidth || d.clientWidth || b.clientWidth;
+
+				//obj.style.top = (viewPort.top + viewPort.height / 2 - obj.offsetHeight / 2) + "px";
+				//obj.style.left = (viewPort.left + viewPort.width / 2 - obj.offsetWidth / 2) + "px";
+
+				var ctop = (viewPort.top + viewPort.height / 2 - that.basewindow.offsetHeight / 2);
+				var cleft = (viewPort.left + viewPort.width / 2 - that.basewindow.offsetWidth / 2);
+
+				var maxL = document.documentElement.clientWidth - that.basewindow.offsetWidth;
+				var maxT = document.documentElement.clientHeight - that.basewindow.offsetHeight;
+
+				ctop = ctop > maxT ? maxT : ctop;
+				cleft = cleft > maxL ? maxL : cleft;
+
+				that.basewindow.style.top = ctop + "px";
+				that.basewindow.style.left = cleft + "px";
+
+				that.basewindow.style.marginTop = that.basewindow.style.marginLeft = 0;
+
+				// var iL = 0;
+				// var iT =0;
+				// var maxL = document.documentElement.clientWidth - obj.offsetWidth;
+				// var maxT = document.documentElement.clientHeight - obj.offsetHeight;
+				// iL = iL < 0 ? 0 : iL;
+				// iL = iL > maxL ? maxL : iL;
+				// iT = iT < 0 ? 0 : iT;
+				// iT = iT > maxT ? maxT : iT;
+				// obj.style.left = iL + "px";
+				// obj.style.top = iT + "px";
+				// 
+
+				// that.basewindow.style.top = topE + 'px';
+				// that.basewindow.style.left = leftE + 'px';
+
+
+				var head = document.createElement('h2');
+				head.append(that.name);
+
+				var closebtn = document.createElement('span');
+				closebtn.setAttribute('id', 'closebtn');
+				closebtn.classList.add('close'); //.setAttribute('class','close');
+				closebtn.append('×');
+				closebtn.onclick = function() {
+					that.basewindow.style.display = 'none';
+				}
+
+				head.appendChild(closebtn);
+
+				that.basewindow.appendChild(head);
+				that.basewindow.style.display = "block";
+
+				document.body.appendChild(this.basewindow);
+				dragable(head, this.basewindow);
+			}
+
+			popWindow.prototype.add = function() {
+				var ccd = document.createElement('input');
+				//ccd.classList.add()
+				ccd.setAttribute('type', 'button');
+				ccd.setAttribute('value', '点击按钮测试');
+				ccd.setAttribute('id', 'btn_test');
+				ccd.style.display = 'block';
+
+				this.basewindow.appendChild(ccd);
+			}
+
+			var pp;
+			document.getElementById('btn_createNew').onclick = function() {
+
+				var opt = {
+					name: '新窗体测试',
+					width: 500,
+					height: 600
+				}
+
+				pp = new popWindow(opt);
+				pp.init();
+			}
+
+			document.getElementById('btn_addContent').onclick = function() {
+				pp.add();
+
+			}
+		</script>
+
+	</body>
 </html>
