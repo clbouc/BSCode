@@ -153,78 +153,631 @@
 		}
 	</script>
 
+	<script type="text/javascript">
+		/**
+		 * 自定义手风琴面板
+		 * @param {string} container
+		 * @param {object} option
+		 * @param {string} option.id 
+		 * @param {string} option.innerHTML
+		 */
+		function CumstomAccordionPanel(container, option) {
+			if (typeof container == 'string') {
+				container = document.getElementById('custom-panel-' + container);
+				if (!container) {
+					container = document.createElement('div');
+					container.setAttribute('class', 'custom-panel');
+					container.setAttribute('id', 'custom-panel-' + container);
+					container.style = "display:block";
+					document.body.appendChild(container);
+					if (option && option.innerHTML) {
+						container.innerHTML = option.innerHTML;
+					}
+				}
+			} else {
+				container = document.createElement('div');
+				container.setAttribute('class', 'custom-panel');
+				container.setAttribute('id', 'custom-panel-' + container);
+				container.style = "display:block";
+				document.body.appendChild(container);
+				if (option && option.innerHTML) {
+					container.innerHTML = option.innerHTML;
+				}
+				//container.innerHTML = CumstomAccordionPanel.View;
+			}
+			this.container = container;
+			this.oH = null;
+			this.oDiv = null;
+			this.option = option;
+		}
+
+		CumstomAccordionPanel.prototype.init = function() {
+			var that = this;
+			that.oH = that.container.getElementsByTagName('h4');
+			that.oDiv = that.container.getElementsByTagName('div');
+			for (var i = 0; i < that.oH.length; i++) {
+				that.oH[i].index = i;
+				that.oH[i].onclick = function() {
+					for (var j = 0; j < that.oH.length; j++) {
+						that.animate(that.oDiv[j], {
+							height: 0
+						});
+					}
+					if (parseInt(that.getStyle(that.oDiv[this.index], 'height')) == 0) {
+						that.animate(that.oDiv[this.index], {
+							height: 250
+						});
+					} else {
+						that.animate(that.oDiv[this.index], {
+							height: 0
+						});
+					}
+				}
+			}
+		}
+		CumstomAccordionPanel.prototype.animate = function(obj, json, endFn) {
+			var that = this;
+
+			//关闭上一个定时器
+			clearInterval(obj.timer);
+			//管理定时器
+			obj.timer = setInterval(function() {
+				//定时器开关 ,用来判断是否定时定时器
+				var flag = true;
+				//遍历json 
+				for (var arrt in json) {
+					//计算步长 步长 = 目标位置 - 当前位置
+					var step = (json[arrt] - parseInt(that.getStyle(obj, arrt))) / 5;
+					//步长取整
+					step = step > 0 ? Math.ceil(step) : Math.floor(step);
+					//盒子移动: 盒子现在的位置 + 步长取整
+					obj.style[arrt] = parseInt(that.getStyle(obj, arrt)) + step + 'px';
+
+					//只要其中一个不满足条件，就不停止定时器
+					if (parseInt(that.getStyle(obj, arrt)) != json[arrt]) {
+						flag = false;
+					}
+				}
+				//关闭定时器
+				if (flag) {
+					clearInterval(obj.timer);
+					//2秒后执行回调函数
+					setTimeout(function() {
+						//判断是否有回调函数，有endFn 再执行回调函数
+						endFn && endFn();
+					}, 1000)
+				}
+			}, 20);
+		}
+
+		/**
+		 * 获得现在的样式
+		 */
+		CumstomAccordionPanel.prototype.getStyle = function(obj, arrt) {
+			//兼容ie
+			return obj.currentStyle ? obj.currentStyle[arrt] : getComputedStyle(obj, null)[arrt];
+		}
+
+		/**
+		 * 添加子元素
+		 * @param {any} option
+		 * @param{} 
+		 */
+		CumstomAccordionPanel.prototype.appendchild = function(option) {
+			var that = this;
+
+			var curH = document.createElement('h4');
+			curH.setAttribute('class', 'custom-panel-title');
+			curH.setAttribute('id', 'cunstom-panel-title-' + option.id);
+			curH.innerHTML = option.title;
+			curH.index = that.container.getElementsByTagName('h4').length;
+			curH.onclick = function() {
+				for (var j = 0; j < that.oH.length; j++) {
+					that.animate(that.oDiv[j], {
+						height: 0
+					});
+				}
+				if (parseInt(that.getStyle(that.oDiv[this.index], 'height')) == 0) {
+					that.animate(that.oDiv[this.index], {
+						height: option.height
+					});
+					//oDiv[this.index].children[0].innerHTML = str[this.index];
+				} else {
+					that.animate(that.oDiv[this.index], {
+						height: 0
+					});
+				}
+			}
+
+			that.container.appendChild(curH);
+
+			var curD = document.createElement('div');
+			curD.setAttribute('class', 'custom-collapse');
+			curD.setAttribute('id', 'cunstom-collapse-' + option.id);
+			curD.innerHTML = option.innerHTML ? option.innerHTML : '';
+			that.container.appendChild(curD);
+
+			that.oH = that.container.getElementsByTagName('h4');
+			that.oDiv = that.container.getElementsByTagName('div');
+		}
+
+		//使用测试
+		function test() {
+			var contentArray = [{
+				id: 'acid-001',
+				title: '测试-01',
+				innerHTML: '这里是测试面板001',
+				height: 100
+			}, {
+				id: 'acid-002',
+				title: '测试-02',
+				innerHTML: '<p>我崇拜高尚的生命的秘密。我崇拜这生命在降生、成长、战斗、伤残、牺牲时迸溅出的钢花焰火。我崇拜一个活灵灵的生命在崇山大河，在海洋和大陆上飘荡的自由。是的，</p>',
+				height: 300
+			}, {
+				id: 'acid-003',
+				title: '测试-03',
+				innerHTML: '<p>人的一生常处于抉择之中，如：念哪一间大学？选哪一种职业？娶哪一种女子？……等等伤脑筋的事情。一个人抉择力的有无，可以</p>',
+				height: 400
+			}];
+
+			var cumstomAccordionPanel = new CumstomAccordionPanel('panel');
+			cumstomAccordionPanel.init();
+
+			for (var i = 0; i < contentArray.length; i++) {
+				cumstomAccordionPanel.appendchild(contentArray[i]);
+			}
+		}
+	</script>
 
 	<script>
-		var curTree = new CustomZtree('treeDemo');
-		curTree.zNodes = [{
-			name: "父节点1",
-			id: '1-1',
-			open: true,
-			children: [{
-					name: "子节点1",
-					id: 11,
-					pId: '1-1',
-					icon: "../../../ThirdParty/zTree_v3/css/zTreeStyle/img/diy/2.png",
-					checked: true,
-					enable: true,
+		//var curTree = new CustomZtree('treeDemo');
+		var appConfig = {
+			BaseURL: './'
+		}
+		var mainMenu = [{
+				name: "作业过程预报和作业计划制订",
+				state: 'closed',
+				id: 'process72h',
+				title: '作业过程预报和作业计划制订',
+				height: 200,
+				children: [{
+						id: 'business-72h-guifan',
+						name: '业务规范',
+						type: 'href',
+						href: appConfig.BaseURL + '/Pages/Business/standard/standard_72h.html',
+					},
+					{
+						name: '天气分析',
+						state: 'closed',
+						children: [{
+								id: 'treenode-business-72h-weather-ground',
+								name: '地面场'
+							},
+							{
+								id: 'treenode-business-72h-weather-gaokong',
+								name: '高空场'
+							},
+							{
+								id: 'treenode-business-72h-weather-t639',
+								name: 'T639'
+							},
+							{
+								id: 'treenode-business-72h-weather-japan',
+								name: '日本预报'
+							},
+							{
+								id: 'treenode-business-72h-weather-germany',
+								name: '德国预报'
+							}
+						]
+					},
+					{
+						name: '降水预报',
+						state: 'closed',
+						children: [{
+								id: 'treenode-business-72h-rainpre-72h',
+								name: '72小时降水预报'
+							},
+							{
+								id: 'treenode-business-72h-rainpre-24h',
+								name: '24小时降水预报'
+							}
+						]
+					},
+					//{
+					//    text: '干旱监测'
+					//    //state: 'closed',
+					//    //children: [
+					//    //    {
+					//    //        text: '干旱预报'
+					//    //    }
+					//    //]
+					//},
+					{
+						id: 'business-72h-product',
+						name: '产品制作',
+						href: appConfig.BaseURL + '/Pages/Business/pdcreate/product72hCreate.html'
 
-					children: [{
-							id: 111,
-							pId: 11,
-							name: '子节点1-1'
-						},
-						{
-							name: '子节点1-2',
-							id: 111 - 1,
-							pId: 111,
-							children: [{
-									name: '子节点1-1-1'
-								},
-								{
-									name: '子节点1-1-2'
-								}
-							]
-						}
-					]
-				},
-				{
-					name: "子节点2",
-					children: [{
-							name: '子节点2-1'
-						},
-						{
-							name: '子节点2-2'
-						}
-					]
-				}
-			]
-		}, {
-			name: "父节点2",
-			id: 2,
-			//pId:'1-1',
-			children: [{
-					name: "子节点1"
-				},
-				{
-					name: "子节点2"
-				}
-			]
-		}];
+					}
+				]
+			},
+			{
+				name: "作业条件潜力预报和作业预案制订",
+				state: 'closed',
+				id: 'process24h',
+				title: '作业条件潜力预报和作业预案制订',
+				height: 200,
+				children: [{
+						id: 'business-24h-guifan',
+						name: '业务规范',
+						type: 'href',
+						href: appConfig.BaseURL + '/Pages/Business/standard/standard_24h.html',
+					},
+					{
+						id: 'business-24h-model',
+						name: '云模式分析',
+						state: 'closed',
+						children: [{
+								id: 'business-24h-model-mm5',
+								name: 'MM5_CAMS模式(M)',
+								type: 'mm5model'
+							},
+							{
+								id: 'business-24h-model-graps',
+								name: 'GRAPS模式(G)',
+								type: 'grapsmodel'
+								//href: appConfig.BaseURL+'/Pages/Business/stan'
+							},
+							{
+								id: 'business-24h-model-cpefs',
+								name: 'CPEFS模式(W)',
+								type: 'cpefsmodel'
+							}
+						]
+					},
+					{
+						id: 'business-24h-option-setting',
+						name: '模式指标选取',
+						//state: 'closed',
+						type: 'controlpanel'
+						//,
+						//children: [
+						//    {
+						//        text: '增雨指标'
+						//    },
+						//    {
+						//        text: '防雹指标'
+						//    }
+						//]
+					},
+					{
+						name: '潜力区识别'
+					},
+					{
+						id: 'business-24h-area-man',
+						name: '潜力区修订',
+						type: 'LayerWidgets',
+						targetLayer: 'qianli'
+					},
+					{
+						name: '产品制作',
+						state: 'closed',
+						children: [{
+								id: 'business-24h-product-qian',
+								name: '潜势预报制作',
+								type: 'href',
+								href: appConfig.BaseURL + '/Pages/Business/pdcreate/product24hCreate.html'
+							},
+							//{
+							//    text: '地面作业预案制作'
+							//},
+							{
+								id: 'business-24h-product-plane',
+								name: '飞机作业预案制作',
+								type: 'href',
+								href: appConfig.BaseURL + '/Pages/Business/pdcreate/product24hplaneCreate.html'
+							}
+						]
+					}
+				]
+			},
+			{
+				name: "作业条件监测预警和方案设计",
+				state: 'closed',
+				id: 'process03h',
+				title: '作业条件监测预警和方案设计',
+				height: 200,
+				children: [{
+						id: 'business-03h-guifan',
+						name: '业务规范',
+						type: 'href',
+						href: appConfig.BaseURL + '/Pages/Business/standard/standard_03h.html',
+					},
+					{
+						id: 'business-03h-cloud',
+						name: '云监测分析',
+						state: 'closed',
+						children: [{
+								id: 'business-03h-satellite',
+								name: '卫星数据',
+								type: 'cloudmodel',
+								moduleName: 'cloudViewer'
+								//,
+								//children: [
+								//    {
+								//        name: '风云',
+								//        state: 'closed',
+								//        children: [
+								//            {
+								//                name: '通道',
+								//                children: [
+								//                    { name: '可见光' },
+								//                    { name: 'IR1' },
+								//                    { name: 'IR2' },
+								//                    { name: 'IR3' },
+								//                    { name: 'IR4' }
+								//                ]
+								//            }
+								//        ]
+								//    },
+								//    {
+								//        name: '葵花8'
+								//    }
+								//]
+							},
+							{
+								id: 'business-03h-radar',
+								name: '雷达数据',
+								type: 'radarmodel',
+								moduleName: "radar2DViewer",
+								mainClassName: "Radar2DViewer"
 
-		curTree.init();
-		curTree.treeObj.setting.callback.beforeClick = function(treeId, node) {
-// 			if (node.level == 0) {
-// 				curTree.treeObj.expandNode(node, !node.open);
-// 			}
-			
-			curTree.openFirstTreenode(node);
-		};
+								//children: [
+								//    {
+								//        name: '基数据',
+								//        state: 'closed',
+								//        children: [
+								//            {
+								//                name: '南郊雷达'
+								//            },
+								//            {
+								//                name: '双偏振雷达'
+								//            }
+								//        ]
+								//    },
+								//    {
+								//        name: '产品',
+								//        state: 'closed',
+								//        children: [
+								//            {
+								//                name: 'CR-组合反射率'
+								//            },
+								//            {
+								//                name: '回波顶高'
+								//            },
+								//            {
+								//                name: '速度'
+								//            },
+								//            {
+								//                name: 'VIL-垂直液态水含量'
+								//            }
+								//        ]
+								//    }
+								//]
+							},
+							{
+								name: 'CPEFS模式(W)'
+							}
+						]
+					},
+					{
+						id: 'business-03h-option',
+						name: '条件指标选取'
+						//,
+						//state: 'closed'
+						//children: [
+						//    {
+						//        id: 'business-03h-',
+						//        name: '增雨指标'
+						//    },
+						//    {
+						//        name: '防雹指标'
+						//    }
+						//]
+					},
+					{
+						id: 'business-03h-area-auto',
+						name: '目标云区自动识别'
+					},
+					{
+						id: 'business-03h-area-man',
+						name: '目标云区交互修订',
+						type: 'LayerWidgets',
+						targetLayer: 'tiaojian'
+
+					},
+					{
+						id: 'business-03h-radar-option',
+						name: '雷达指标选取'
+						//,
+						//state: 'closed',
+						//children: [
+						//    {
+						//        name: '增雨指标'
+						//    },
+						//    {
+						//        name: '防雹指标'
+						//    }
+						//]
+					},
+					{
+						name: '雷达回波区自动识别'
+					},
+					{
+						name: '产品制作',
+						state: 'closed',
+						children: [{
+								id: 'business-03h-product',
+								name: '作业条件监测预警',
+								type: 'href',
+								href: appConfig.BaseURL + '/Pages/Business/pdcreate/product03hCreate.html'
+							},
+							//{
+							//    name: '地面作业方案'
+							//},
+							{
+								id: 'business-03h-product-plane',
+								name: '飞机作业方案',
+								type: 'href',
+								href: appConfig.BaseURL + '/Pages/Business/pdcreate/product03hplaneCreate.html'
+							}
+						]
+					}
+					//,
+					//{
+					//    name: '飞机方案设计',
+					//    state: 'closed',
+					//    children: [
+					//        {
+					//            name: '潜力区'
+					//        },
+					//        {
+					//            name: '交互航线设计'
+					//        },
+					//        {
+					//            name: '方案报制作'
+					//        }
+					//    ]
+					//}
+				]
+			},
+			{
+				name: "跟踪指挥和作业实施",
+				state: 'closed',
+				id: 'process00h',
+				title: '跟踪指挥和作业实施',
+				height: 200,
+				children: [{
+						id: 'business-00h-guifan',
+						name: '业务规范',
+						type: 'href',
+						href: appConfig.BaseURL + '/Pages/Business/standard/standard_00h.html'
+					},
+					{
+						name: '地面作业监控'
+					},
+					{
+						id: 'business-00h-ground',
+						name: '地面作业指令制作',
+						type: 'href',
+						href: appConfig.BaseURL + '/Pages/Business/pdcreate/product00hGroundCreate.html'
+					},
+					{
+						name: '飞机作业监控'
+					}
+					//,
+					//{
+					//    name: '航迹显示'
+					//},
+					//{
+					//    name: '飞机作业方案'
+					//}
+				]
+			},
+			{
+				name: "信息收集和效果评估",
+				state: 'closed',
+				id: 'processReh',
+				title: '信息收集和效果评估',
+				height: 200,
+				children: [{
+						//name: '业务规范'
+						id: 'business-reh-guifan',
+						name: '业务规范',
+						type: 'href',
+						href: appConfig.BaseURL + '/Pages/Business/standard/standard_reh.html'
+					},
+					{
+						name: "监测数据",
+						state: 'closed',
+						children: [{
+								name: '卫星产品',
+								id: 'business-reh-satellite',
+								type: 'cloudmodel',
+								moduleName: 'cloudViewer'
+							},
+							{
+								id: 'business-reh-radar',
+								name: '雷达数据',
+								type: 'radarmodel',
+								moduleName: "radar2DViewer",
+								mainClassName: "Radar2DViewer"
+							},
+							{
+								id: 'business-reh-rain',
+								name: '雨量数据',
+								type: 'rainmodel',
+								moduleName: 'cimissViewer'
+							}
+						]
+					},
+					{
+						id: 'business-reh-planework',
+						name: '飞机作业信息',
+						type: 'href',
+						href: appConfig.BaseURL + '/Pages/InfoManager/infoquery.html?type=workinfoplane'
+					},
+					{
+						id: 'business-reh-groundwork',
+						name: '地面作业信息',
+						type: 'href',
+						href: appConfig.BaseURL + '/Pages/InfoManager/infoquery.html?type=workinfoground'
+					},
+					{
+						id: 'business-reh-targetarea',
+						name: '影响区/对比区确定',
+						type: 'LayerWidgets',
+						targetLayer: 'evaluate'
+					},
+					{
+						id: 'business-reh-rain',
+						name: '雨量累积计算',
+						type: 'rainmodel',
+						moduleName: 'cimissViewer'
+					},
+					{
+						name: '增雨量计算'
+					}
+				]
+			}
+		];
+		var that = this;
+		that.cumstomAccordionPanel = new CumstomAccordionPanel('businessRealTime');
+		that.cumstomAccordionPanel.init();
+		that.cumstomAccordionPanel.container.style.position = 'absolute';
+		that.cumstomAccordionPanel.container.style.left = 0 + 'px';
+		that.cumstomAccordionPanel.container.style.top = 120 + 'px';
+
+		for (var i = 0; i < that.mainMenu.length; i++) {
+			that.mainMenu[i].innerHTML = ' <ul id="' + 'tree-business-' + that.mainMenu[i].id + '" class="ztree"></ul>';
+			that.cumstomAccordionPanel.appendchild(that.mainMenu[i]);
+
+			var curTree = new CustomZtree('tree-business-' + that.mainMenu[i].id);
+			curTree.zNodes = that.mainMenu[i];
+			curTree.init();
+
+			//$('#' + 'tree-business-' + that.mainMenu[i].id).tree({
+			//    data: that.mainMenu[i].children,
+			//    onClick: function (node) {
+			//        that.bingingNodeEvent(node);
+			//    }
+			//});
+		}
 
 
-
-		var curTree2 = new CustomZtree('treeDemo2');
-		curTree2._zNodes = curTree.zNodes;
-		curTree2.init();
+		// 		var curTree2 = new CustomZtree('treeDemo2');
+		// 		curTree2._zNodes = curTree.zNodes;
+		// 		curTree2.init();
 
 		$('#btn_addnode').click(function() {
 			curTree.addNodes({

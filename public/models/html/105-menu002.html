@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html" charset="utf-8"/>
+   <title>左侧固定，右侧浮动的菜单样式</title>
+   <script src="/Scripts/jquery-1.10.2.min.js"></script>
+   <script>
+       $(function () {
+           $(".left_nav dd").hover(function () {
+               $(".nav_right", this).show();
+
+
+           });
+           $(".left_nav dd").mouseleave(function () {
+               $(".nav_right", this).hide();
+           });
+
+
+       });
+   </script>
+   <style type="text/css">
+      /*初始化样式*/
+      * {
+         margin:0;
+         padding:0;
+         font-size:18px;
+      }
+      /*设置超链接样式*/
+      a {
+        text-decoration:none;
+        color:#333;
+        }
+      a:link{
+        text-decoration:none;
+      }
+      a:active{
+        text-decoration:none;
+      }
+      a:hover{
+        text-decoration:none;
+      }
+        a:visited{
+        text-decoration:none;
+      }
+        /*设置底层视图的样式*/
+        .left_nav{
+          width:120px;
+          height:auto;/*高度设置为自动，则根据视图的内容的高度来自动适应高度*/
+          padding:5px;
+          position:fixed;
+          left:10px;
+          top:10px;
+          margin:10px 0px 0px 10px;
+          z-index:777;
+          background-color:red;
+        }
+        /*设置自定义列表的标题样式*/
+        .left_nav dl dt{
+          width:80px;
+          height:22px;
+          line-height:22px;
+          background:url("/Image/long.png") no-repeat 12px center #e6238f;
+          padding-left:40px;
+          color:#fff;
+          margin-bottom:4px;
+        }
+        /*设置自定义列表的行样式*/
+        .left_nav dl dd{
+            width:128px;
+            height:30px;
+            position:relative;
+        }
+        /*设置自定义列表中的行中层的样式*/
+        .left_nav dl dd .nav_right{
+            width:300px;
+            height:auto;
+            overflow:hidden;
+            position:absolute;
+            left:125px;
+            top:0px;
+            padding:0px 5px 10px 5px;
+            display:none; 
+            border:1px solid #ccc;
+            background-color:#fff;
+
+
+        }
+        /*设置自定义列表中的行中层的链接的样式*/
+        .left_nav dl dd .nav_right a{
+            width:110px;
+            height:20px;
+            line-height:20px;
+            padding-left:40px;
+            margin-top:0px;
+            color:#666;
+            background-color:#fff;
+            background:url("/Image/nav_right_bg.png") no-repeat 20px center;
+            display:block;
+            float:left;
+            white-space:nowrap;/*该属性设置为该值时，则文本不会换行，直到遇到<br>才换行*/
+            text-overflow:ellipsis;/*该属性设置为该值时，则超出文本框的内容用省略号代替*/
+             -o-text-overflow:ellipsis;
+             /*overflow: hidden和white-space: nowrap都是必须的否则不会显示省略号；-o-text-overflow: ellipsis针对Opera；而宽度的设定主要是针对IE6；*/
+             overflow:hidden;
+        }
+         /*设置自定义列表中的行中层中当鼠标悬浮时链接标签的样式*/
+         .left_nav dl dd .nav_right a:hover{
+            width:110px;
+            height:20px;
+            line-height:20px;
+            background:url("/Image/nav_right_bg2.png") no-repeat 20px center #e6238f;
+            text-align:left;
+            color:#fff;
+            padding-left:40px;
+         }
+         /*设置自定义列表的左边链接的样式*/
+         .left_nav dl dd a.nav_left{
+           width:107px;
+           height:29px;
+           line-height:29px;
+           background:url("/Image/left_nav_dt_bg.png") no-repeat 105px center #E0E0E0;
+           padding-left:13px;
+           display:block;
+           white-space:nowrap;
+           text-overflow:ellipsis;
+           -o-text-overflow:ellipsis;
+           overflow:hidden;
+           border-bottom:1px solid #fff;
+           color:#3c4347;
+         }
+         /*设置自定义列表的左边当鼠标悬浮在链接上时的样式*/
+         .left_nav dl dd a.nav_left:hover{
+            background:url('/Image/left_nav_dt_bg2.png') no-repeat 105px center #e6238f;
+            color:#fff;
+         }
+         /*清除浮动*/
+         .clear {
+         clear:both;
+         }
+   </style>
+</head>
+<body>
+    <div class="left_nav">
+        <dl>
+            <dt>分类</dt>
+            <dd><a href="javascript:" class="nav_left">玉石</a><div class="nav_right"><a href="javascript:">木雕</a><a href="javascript:">木雕</a><a href="javascript:">木雕</a></div></dd>
+            <dd><a href="javascript:" class="nav_left">刺绣</a><div class="nav_right"><a href="javascript:">222222</a></div></dd>
+            <dd><a href="javascript:" class="nav_left">玻璃工艺</a><div class="nav_right"><a href="javascript:">33333</a></div></dd>
+            <dd><a href="javascript:" class="nav_left">青铜器</a></dd>
+            <dd><a href="javascript:" class="nav_left">雕刻</a></dd>
+            <dd><a href="javascript:" class="nav_left">金属工艺</a></dd>
+            <dd><a href="javascript:" class="nav_left">陶瓷</a></dd>
+            <dd><a href="javascript:" class="nav_left">手工绘画</a></dd>
+            <dd><a href="javascript:" class="nav_left">特种工艺</a></dd>
+        </dl>   
+    </div>
+    <p style="margin-top:50px;margin-left:150px">fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</p>
+</body>
+</html>

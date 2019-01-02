@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../../../ThirdParty/knockout/knockout-3.4.2.js"></script>
+
+	</head>
+	<body>
+
+
+		<div class="left nav" id="topMenu">
+			<ul>
+				<!--class="nav_active"-->
+				<li><a href="javascript:void(0)" data-bind="click:comprehensive.visible">综合观测</a></li>
+				<li><a href="javascript:void(0)" data-bind="click:comprehensive">实时业务</a></li>
+                <li><a href="javascript:void(0)" data-bind="event:{click:realtimeModel}">日常业务</a></li>
+                <li><a href="javascript:void(0)" data-bind="event:{click:work}">作业指挥</a></li>
+			</ul>
+		</div>
+		<div class="header_center left" style="position:relative">
+			<h2 id="appName"><strong>人工影响天气智能一体化作业指挥平台</strong></h2>
+		</div>
+		<div class="right nav text_right">
+			<!-- <ul>
+                <li><a href="javascript:void(0)" data-bind="event:{click:}">飞机作业</a></li>
+                <li><a href="javascript:void(0)" data-bind="event:{click:}">特种观测</a></li>
+                <li><a href="javascript:void(0)" data-bind="event:{click:}">信息管理</a></li>
+                <li><a href="javascript:void(0)" data-bind="event:{click:}">个例展示</a></li>
+            </ul> -->
+		</div>
+
+		<script>
+			var app = {
+
+				container: document.getElementById('topMenu'),
+				comprehensive: function() {
+					return {
+						visible: function() {
+							alert('11');
+						}
+					}
+				},
+					
+				realtimeModel:function(){
+					alert(11);
+				},
+				work:function(){
+					alert(222);
+				},
+				init: function() {
+					ko.applyBindings(this, this.container);
+				}
+			};
+			//ko.applyBindings(app, document.getElementById('topMenu'));
+			app.init();
+		</script>
+		
+		
+		<ul data-bind="foreach: places" id="curUl">
+    <li>
+        <span data-bind="text: $data"></span>
+        <button data-bind="click: $parent.removePlace">Remove</button>
+    </li>
+</ul>
+ 
+ <script type="text/javascript">
+     function MyViewModel() {
+         var self = this;
+         self.places = ko.observableArray(['London', 'Paris', 'Tokyo']);
+ 
+         // The current item will be passed as the first parameter, so we know which place to remove
+         self.removePlace = function(place) {
+             self.places.remove(place)
+         }
+     }
+     ko.applyBindings(new MyViewModel(),document.getElementById('curUl'));
+</script>
+
+	</body>
+</html>

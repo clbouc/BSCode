@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			.custom-panel {
+				width: 555px;
+				height: auto;
+				background-color: #333333;
+				margin: 50px auto;
+			}
+
+			.custom-panel-title {
+				width: 100%;
+				height: 38px;
+				text-align: center;
+				font: 600 18px/38px '微软雅黑';
+				color: #fff;
+				cursor: pointer;
+			}
+
+			.custom-collapse {
+				width: 100%;
+				height: 0;
+				background-color: #167EA0;
+				overflow: hidden;
+				border-top: solid 1px #ccc;
+			}
+
+			.custom-collapse p {
+				color: #fff;
+				font: 500 16px '微软雅黑';
+				text-indent: 2em;
+				padding: 20px 20px 0 20px;
+			}
+
+			/* #One,
+			#Tow,
+			#Three {
+				border-top: solid 1px #ccc;
+			} */
+		</style>
+	</head>
+	<body>
+
+		<!-- <div class="custom-panel" id="panel"> -->
+		<!-- <h4 class="custom-panel-title" id="panel-title">1 《抉择》</h4>
+			<div class="custom-collapse" id="One">
+				<p>here</p>
+			</div>
+			<h4 class="custom-panel-title" id="panel-title">2 《生命》</h4>
+			<div class="custom-collapse" id="Tow">
+				<p>人的一生常处于抉择之中，如：念哪一间大学？选哪一种职业？娶哪一种女子？……等等伤脑筋的事情。一个人抉择力的有无，可以</p>
+				<p>here</p>
+				<p>here</p>
+				<p>here</p>
+				<p>here</p>
+				<p>here</p>
+
+			</div>
+			<h4 class="custom-panel-title" id="panel-title">3 《大小》</h4>
+			<div class="custom-collapse" id="Three">
+				<p>我崇拜高尚的生命的秘密。我崇拜这生命在降生、成长、战斗、伤残、牺牲时迸溅出的钢花焰火。我崇拜一个活灵灵的生命在崇山大河，在海洋和大陆上飘荡的自由。是的，</p>
+			</div>
+			<h4 class="custom-panel-title" id="panel-title">4 《崇拜》</h4>
+			<div class="custom-collapse" id="Four">
+				<p>人的一生常处于抉择之中，如：念哪一间大学？选哪一种职业？娶哪一种女子？……等等伤脑筋的事情。一个人抉择力的有无，可以</p>
+			</div> -->
+		<!-- </div>
+ -->
+		<script>
+			function CumstomAccordionPanel(container, option) {
+				if (typeof container == 'string') {
+					container = document.getElementById('custom-panel-' + container);
+					if (!container) {
+						container = document.createElement('div');
+						container.setAttribute('class', 'custom-panel');
+						container.setAttribute('id', 'custom-panel-' + container);
+						container.style = "display:block";
+						document.body.appendChild(container);
+						if (option && option.innerHTML) {
+							container.innerHTML = option.innerHTML;
+						}
+					}
+				} else {
+					container = document.createElement('div');
+					container.setAttribute('class', 'custom-panel');
+					//container.setAttribute('data-bind', 'visible:businessRealTimeControl');
+					container.style = "display:block";
+					container.innerHTML = option.innerHTML;
+					//container.innerHTML = CumstomAccordionPanel.View;
+				}
+				this.container = container;
+				this.oH = null;
+				this.oDiv = null;
+				this.option = option;
+
+			}
+
+			CumstomAccordionPanel.prototype.init = function() {
+				var that = this;
+				that.oH = that.container.getElementsByTagName('h4');
+				that.oDiv = that.container.getElementsByTagName('div');
+				for (var i = 0; i < that.oH.length; i++) {
+					that.oH[i].index = i;
+					that.oH[i].onclick = function() {
+						for (var j = 0; j < that.oH.length; j++) {
+							that.animate(that.oDiv[j], {
+								height: 0
+							});
+						}
+						if (parseInt(that.getStyle(that.oDiv[this.index], 'height')) == 0) {
+							that.animate(that.oDiv[this.index], {
+								height: 250
+							});
+						} else {
+							that.animate(that.oDiv[this.index], {
+								height: 0
+							});
+						}
+					}
+				}
+			}
+			CumstomAccordionPanel.prototype.animate = function(obj, json, endFn) {
+				var that = this;
+
+				//关闭上一个定时器
+				clearInterval(obj.timer);
+				//管理定时器
+				obj.timer = setInterval(function() {
+					//定时器开关 ,用来判断是否定时定时器
+					var flag = true;
+					//遍历json 
+					for (var arrt in json) {
+						//计算步长 步长 = 目标位置 - 当前位置
+						var step = (json[arrt] - parseInt(that.getStyle(obj, arrt))) / 5;
+						//步长取整
+						step = step > 0 ? Math.ceil(step) : Math.floor(step);
+						//盒子移动: 盒子现在的位置 + 步长取整
+						obj.style[arrt] = parseInt(that.getStyle(obj, arrt)) + step + 'px';
+
+						//只要其中一个不满足条件，就不停止定时器
+						if (parseInt(that.getStyle(obj, arrt)) != json[arrt]) {
+							flag = false;
+						}
+					}
+					//关闭定时器
+					if (flag) {
+						clearInterval(obj.timer);
+						//2秒后执行回调函数
+						setTimeout(function() {
+							//判断是否有回调函数，有endFn 再执行回调函数
+							endFn && endFn();
+						}, 1000)
+					}
+				}, 20);
+			}
+
+			/**
+			 * 获得现在的样式
+			 */
+			CumstomAccordionPanel.prototype.getStyle = function(obj, arrt) {
+				//兼容ie
+				return obj.currentStyle ? obj.currentStyle[arrt] : getComputedStyle(obj, null)[arrt];
+			}
+
+			CumstomAccordionPanel.prototype.appendchild = function(option) {
+				var that = this;
+
+				var curH = document.createElement('h4');
+				curH.setAttribute('class', 'custom-panel-title');
+				curH.setAttribute('id', 'cunstom-panel-title-' + option.id);
+				curH.innerHTML = option.title;
+				curH.index = that.container.getElementsByTagName('h4').length;
+				curH.onclick = function() {
+					for (var j = 0; j < that.oH.length; j++) {
+						that.animate(that.oDiv[j], {
+							height: 0
+						});
+					}
+					if (parseInt(that.getStyle(that.oDiv[this.index], 'height')) == 0) {
+						that.animate(that.oDiv[this.index], {
+							height: option.height
+						});
+						//oDiv[this.index].children[0].innerHTML = str[this.index];
+					} else {
+						that.animate(that.oDiv[this.index], {
+							height: 0
+						});
+					}
+				}
+
+				that.container.appendChild(curH);
+
+				var curD = document.createElement('div');
+				curD.setAttribute('class', 'custom-collapse');
+				curD.setAttribute('id', 'cunstom-collapse-' + option.id);
+				curD.innerHTML = option.innerHTML;
+				that.container.appendChild(curD);
+
+				that.oH = that.container.getElementsByTagName('h4');
+				that.oDiv = that.container.getElementsByTagName('div');
+			}
+
+            //使用测试
+			function test() {
+				var contentArray = [{
+					id: 'acid-001',
+					title: '测试-01',
+					innerHTML: '这里是测试面板001',
+					height: 100
+				}, {
+					id: 'acid-002',
+					title: '测试-02',
+					innerHTML: '<p>我崇拜高尚的生命的秘密。我崇拜这生命在降生、成长、战斗、伤残、牺牲时迸溅出的钢花焰火。我崇拜一个活灵灵的生命在崇山大河，在海洋和大陆上飘荡的自由。是的，</p>',
+					height: 300
+				}, {
+					id: 'acid-003',
+					title: '测试-03',
+					innerHTML: '<p>人的一生常处于抉择之中，如：念哪一间大学？选哪一种职业？娶哪一种女子？……等等伤脑筋的事情。一个人抉择力的有无，可以</p>',
+					height: 400
+				}];
+
+				var cumstomAccordionPanel = new CumstomAccordionPanel('panel');
+				cumstomAccordionPanel.init();
+
+				for (var i = 0; i < contentArray.length; i++) {
+					cumstomAccordionPanel.appendchild(contentArray[i]);
+				}
+			}
+		</script>
+
+	</body>
+</html>

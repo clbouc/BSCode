@@ -1,0 +1,786 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>jQuery多级无限级导航下拉菜单代码</title>
+
+  <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-size: 12px;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    ul.nav li {
+      width: 180px;
+      text-align: center;
+    }
+
+    ul.nav>li {
+
+      display: inline-block;
+      width: 120px;
+      text-align: center;
+      vertical-align: middle;
+      height: 40px;
+      float: left;
+      /* position: relative; */
+      line-height: 40px;
+      margin-top: 20px;
+      box-sizing: border-box;
+      box-shadow: -5px 0px 5px #034c6a inset,
+        0px -5px 15px #034c6a inset,
+        5px 0px 15px #034c6a inset,
+        0px 5px 15px #034c6a inset;
+      border-radius: 5px;
+
+    }
+
+    ul.nav li h3 {
+      height: 40px;
+      line-height: 40px;
+    }
+
+    ul.nav>li>h3 {
+      color: #FFFFff;
+      /* background: #030829; */
+    }
+
+    ul.nav>li>ul>li h3 {
+      background: #030829;
+      color: #FFFFff;
+    }
+
+    ul.nav>li h3:hover,
+    .choice {
+      background: #030829 !important;
+      box-shadow: -10px 0px 15px #034c6a inset,
+        0px -10px 15px #034c6a inset,
+        10px 0px 15px #034c6a inset,
+        0px 10px 15px #034c6a inset;
+      color: #f9e209;
+      box-sizing: border-box;
+    }
+
+    ul>li>ul {
+      display: none;
+    }
+
+    ul>li.on>ul {
+      display: block;
+    }
+
+    ul.nav li {
+      position: relative;
+    }
+
+    ul.nav>li>ul>li ul {
+      position: absolute;
+      top: 0;
+      right: -180px;
+    }
+
+    ul.nav span.sub {
+      position: absolute;
+      display: block;
+      right: 10px;
+      top: 0;
+      width: 10px;
+      height: 40px;
+      background: url(images/arrows.png) no-repeat center center;
+    }
+
+    ul.nav li.leftul ul li:hover>ul {
+      visibility: visible;
+      left: auto;
+      right: 100%;
+      top: 0;
+    }
+
+    .left {
+      float: left;
+    }
+
+    .right {
+      float: right;
+    }
+
+    .clear {
+      clear: both;
+    }
+
+    .text_right {
+      text-align: right;
+    }
+
+    .header {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 80px;
+      background-color: #030829;
+      filter: alpha(Opacity=90);
+      -moz-opacity: 0.9;
+      opacity: 0.9;
+      z-index: 99;
+    }
+
+    .header_center {
+      width: 30%;
+      margin: 0px auto;
+      color: #FFFFff;
+      text-align: center;
+      height: 80px;
+      background-image: url("../images/logoBg.png");
+      background-size: 100% 100%;
+      font-family: "微软雅黑" !important;
+      font-weight: bold;
+    }
+
+    .header_center h2 {
+      margin-top: 20px !important;
+      font-size: 24px !important;
+      font-family: "微软雅黑" !important;
+      font-weight: bold;
+    }
+
+    .color_font {
+      color: #e8f7fe !important;
+      font-size: 12px !important;
+    }
+
+    .header_logo {
+      margin-left: 1%;
+      margin-top: 12px;
+
+    }
+
+    .header_logo img {
+      height: 56px;
+    }
+
+    .li_ul {
+      position: absolute;
+      background-color: #030829;
+      width: 100%;
+      /*border-top:4px solid #4b8df8;*/
+      display: none;
+      z-index: 999;
+
+    }
+
+    .li_ul li {
+      line-height: 40px !important;
+    }
+
+    .li_ul li:hover {
+      background-color: #4b8df8;
+      border-bottom: 4px solid #4b8df8;
+      box-shadow: -10px 0px 15px #034c6a inset,
+        0px -10px 15px #034c6a inset,
+        10px 0px 15px #034c6a inset,
+        0px 10px 15px #034c6a inset;
+      box-sizing: border-box;
+    }
+
+    .li_ul li a {
+      color: #ffffff;
+      font-size: 13px;
+    }
+  </style>
+
+
+
+</head>
+
+<body>
+
+  <header class="header left" id="topMenu">
+    <div class="left navdiv" id="topMeunLeft">
+
+    </div>
+    <div class="header_center left" style="position:absolute;margin-left: 35%;">
+      <h2 id="appName"><strong>人工影响天气智能一体化作业指挥平台</strong></h2>
+    </div>
+    <div class="right navdiv text_right" id="topMeunRight">
+
+    </div>
+  </header>
+
+
+  <script>
+    var appConfig = {
+      "BaseURL": "./"
+    };
+
+
+    var targetArray = ['_blank', '_self', '_parent', '_top', '_iframeContent'];
+    var topmenu = [
+      { name: '五段业务' },
+      {
+        name: '综合观测',
+        children: [
+          {
+            name: '站点',
+            id: 'com_station',
+            state: 'closed',
+            children: [
+              {
+                name: '人影基地',
+                id: 'com_station_rybase'
+              },
+              {
+                name: '人影作业点',
+                id: 'com_station_ry',
+                state: 'closed',
+                children: [
+                  {
+                    id: 'com_station_ry_cannon',
+                    name: '高炮'
+                  },
+                  {
+                    id: 'com_station_ry_rocket',
+                    name: '火箭'
+                  },
+                  {
+                    id: 'com_station_ry_burner',
+                    name: '烟炉'
+                  }
+                ]
+              },
+              {
+                name: '气象观测站',
+                id: 'com_station_rybase'
+              }
+
+            ]
+          },
+          {
+            name: '实况',
+            id: 'com_realtime',
+            state: 'closed',
+            children: [
+              {
+                id: 'com_realtime_cloud',
+                name: '卫星云图',
+                state: 'closed',
+                children: [
+                  {
+                    id: 'com_realtime_cloud_fy',
+                    name: '风云',
+                    type: 'window',// 'custompopwindow',
+                    taget: 'cloudViewer',
+                    moduleIndex: 0
+
+                  },
+                  {
+                    id: 'com_realtime_cloud_kh',
+                    name: '葵花8'
+                  }
+                ]
+              },
+              {
+                id: 'com_realtime_radar',
+                name: '雷达',
+                state: 'closed',
+                children: [
+                  {
+                    id: 'com_realtime_radar_single',
+                    name: '单站雷达',
+                    type: 'window',// 'custompopwindow',
+                    taget: 'radarViewer',
+                    moduleIndex: 2
+                  },
+                  {
+                    id: 'com_realtime_radar_multi',
+                    name: '雷达拼图'
+                  }
+                ]
+              },
+              {
+                id: 'com_realtime_wind',
+                name: '风场',
+                state: 'closed',
+                children: [
+                  {
+                    id: '',
+                    name: '高空风'
+                  },
+                  {
+                    id: '',
+                    name: '地面'
+                  }
+                ]
+              },
+              {
+                id: 'com_realtime_rain',
+                name: '雨量',
+                state: 'closed',
+                children: [
+                  {
+                    id: '',
+                    name: '分钟雨量',
+                    type: 'window',// 'custompopwindow',
+                    taget: 'cimissViewer',
+                    moduleIndex: 1
+                  },
+                  {
+                    id: '',
+                    name: '小时雨量',
+                    type: 'window',// 'custompopwindow',
+                    taget: 'cimissViewer'
+                  },
+                  {
+                    id: '',
+                    name: '累积雨量',
+                    type: 'window',// 'custompopwindow',
+                    taget: 'cimissViewer'
+                  }
+                ]
+              },
+              {
+                id: 'com_realtime_thunder',
+                name: '雷电'
+              },
+              {
+                id: 'com_realtime_hail',
+                name: '冰雹'
+              },
+              {
+                id: 'com_realtime_air',
+                name: '空气质量',
+                state: 'closed',
+                children: [
+                  {
+                    id: '',
+                    name: 'PM2.5'
+                  },
+                  {
+                    id: '',
+                    name: 'PM10'
+                  },
+                  {
+                    id: '',
+                    name: 'O3'
+                  },
+                  {
+                    id: '',
+                    name: 'SO2'
+                  }
+                ]
+              },
+              {
+                id: 'com_realtime_view',
+                name: '能见度',
+              },
+              {
+                id: 'com_realtime_superwind',
+                name: '台风'
+              }
+            ]
+          },
+          {
+            name: '模式',
+            id: 'com_model',
+            state: 'closed',
+            children: [
+              {
+                id: '',
+                name: 'GRAPES_GFS',
+                type: 'custompopwindow',
+                taget: 'gradsViewer',
+                moduleIndex: 4
+              },
+              {
+                id: '',
+                name: 'GRAPES_MESO',
+                type: 'custompopwindow',
+                taget: 'gradsViewer',
+                moduleIndex: 4
+              },
+              {
+                id: '',
+                name: 'GRAPES中尺度集合预报',
+                type: 'custompopwindow',
+                taget: 'gradsViewer',
+                moduleIndex: 4
+
+              },
+              {
+                id: '',
+                name: 'T639L60',
+                type: 'custompopwindow',
+                taget: 'gradsViewer',
+                moduleIndex: 4
+              },
+              {
+                id: '',
+                name: 'T639全球集合预报',
+                type: 'custompopwindow',
+                taget: 'gradsViewer',
+                moduleIndex: 4
+              },
+              {
+                id: '',
+                name: 'BJRUC',
+                type: 'custompopwindow',
+                taget: 'gradsViewer',
+                moduleIndex: 4
+              }
+            ]
+          },
+          {
+            name: '预报',
+            id: 'com_forecast',
+            state: 'closed',
+            children: [
+              {
+                id: '',
+                name: '天气公报',
+                type: 'href',
+                taget: targetArray[0],
+                href: 'http://www.nmc.cn/publish/weather-bulletin/index.htm'
+              },
+              {
+                id: '',
+                name: '灾害预警',
+                type: 'href',
+                taget: targetArray[0],
+                href: 'http://www.nmc.cn/publish/country/warning/typhoon.html'
+              },
+              {
+                id: '',
+                name: '降水预报',
+                type: 'href',
+                href: 'http://www.nmc.cn/publish/precipitation/1-day.html',
+                children: [
+                  {
+                    id: '',
+                    name: '24小时',
+                    type: 'href',
+                    taget: targetArray[0],
+                    href: 'http://www.nmc.cn/publish/precipitation/1-day.html'
+                  },
+                  {
+                    id: '',
+                    name: '48小时',
+                    type: 'href',
+                    taget: targetArray[0],
+                    href: 'http://www.nmc.cn/publish/precipitation/2-day.html'
+                  },
+                  {
+                    id: '',
+                    name: '72小时',
+                    type: 'href',
+                    taget: targetArray[0],
+                    href: 'http://www.nmc.cn/publish/precipitation/3-day.html'
+                  }
+                ]
+              },
+              {
+                id: '',
+                name: '气温预报'
+              },
+              {
+                id: '',
+                name: '强对流天气'
+              }
+            ]
+          },
+          {
+            name: '特种',
+            id: 'com_special',
+            state: 'closed',
+            children: [
+              {
+                id: 'com_special_ground',
+                name: '地面',
+                state: 'closed',
+                children: [
+                  {
+                    id: '',
+                    name: '雨滴谱'
+                  }
+                ]
+              },
+              {
+                id: 'com_special_air',
+                name: '高空',
+                state: 'closed',
+                children: [
+                  {
+                    id: '',
+                    name: '飞机',
+                    type: 'href',
+                    taget: '_blank',
+                    href: appConfig.BaseURL + '/loginplane.html'
+                  },
+                  {
+                    id: '',
+                    name: '风廓线'
+                  },
+                  {
+                    id: '',
+                    name: '云雷达'
+                  },
+                  {
+                    id: '',
+                    name: '微波辐射计'
+                  }
+                ]
+              }
+
+            ]
+          },
+          {
+            name: '冬奥',
+            id: 'com_olympic',
+            state: 'closed',
+            children: [
+              {
+                id: 'com_special_radar',
+                name: '雷达',
+                state: 'closed',
+                children: [
+                  {
+                    id: '',
+                    name: 'X波段双偏振雷达'
+                  },
+                  {
+                    id: '',
+                    name: '车载风廓线雷达'
+                  },
+                  {
+                    id: '',
+                    name: 'Ka波段车载云雷达'
+                  },
+                  {
+                    id: '',
+                    name: '风廓线雷达'
+                  },
+                  {
+                    id: '',
+                    name: '激光测风雷达'
+                  },
+                  {
+                    id: '',
+                    name: '微雨雷达'
+                  },
+                  {
+                    id: '',
+                    name: '云雷达'
+                  }
+                ]
+              },
+              {
+                id: 'com_special_radar',
+                name: '雪',
+                state: 'closed',
+                children: [
+                  {
+                    id: '',
+                    name: '雪采样'
+                  },
+                  {
+                    id: '',
+                    name: '雪深'
+                  },
+                  {
+                    id: '',
+                    name: '雪形显微仪'
+                  }
+                ]
+              },
+              {
+                id: 'com_special_other',
+                name: '其他',
+                state: 'closed',
+                children: [
+                  {
+                    id: 'com_special_01',
+                    name: '5L比格冰核观测仪'
+                  },
+                  {
+                    id: '',
+                    name: '便携自动气象站'
+                  },
+                  {
+                    id: '',
+                    name: '二维雨滴谱仪'
+                  },
+                  {
+                    id: '',
+                    name: '空气动力学粒径谱仪'
+                  },
+                  {
+                    id: '',
+                    name: '环境颗粒物分析仪'
+                  },
+                  {
+                    id: '',
+                    name: '连续流量扩散云室冰核观测仪'
+                  },
+                  {
+                    id: '',
+                    name: '能见度仪'
+                  },
+                  {
+                    id: '',
+                    name: '全天空成像仪'
+                  },
+                  {
+                    id: '',
+                    name: '土壤采样'
+                  },
+                  {
+                    id: '',
+                    name: '微波辐射计'
+                  },
+
+                  {
+                    id: '',
+                    name: '雾滴谱仪'
+                  },
+
+                  {
+                    id: '',
+                    name: '云高仪'
+                  },
+
+                  {
+                    id: '',
+                    name: '雨滴谱仪'
+                  },
+                  {
+                    id: '',
+                    name: '云凝结核计数器'
+                  },
+                  {
+                    id: '',
+                    name: '自动气象观测场'
+                  },
+                  {
+                    id: '',
+                    name: '海坨山方向视频采集'
+                  }
+                ]
+              }
+            ]
+          }]
+      }];
+    function getNavHtml(menuJson) {
+      var text = "";
+      if (menuJson && menuJson.length > 0) {
+        text += "<ul class='nav'>";//
+        for (var i = 0; i < menuJson.length; i++) {
+          text += "<li><h3>" + menuJson[i].name + "</h3>";
+
+          if (menuJson[i].children && menuJson[i].children.length > 0) {
+            text += getSubMenuHtml(menuJson[i].children);
+          }
+          text += "</li>";
+        }
+        text += "</ul>";
+      }
+      return text;
+    }
+
+    function getSubMenuHtml(menuJson) {
+      var text = "";
+      if (menuJson && menuJson.length > 0) {
+        text += "<ul>"
+        for (var i = 0; i < menuJson.length; i++) {
+          text += "<li><h3>" + menuJson[i].name + "</h3>";
+
+          if (menuJson[i].children && menuJson[i].children.length > 0) {
+            text += getSubMenuHtml(menuJson[i].children);
+          }
+          text += "</li>";
+        }
+        text += "</ul>";
+      }
+      return text;
+    }
+
+    function getSubMenuHtmlRight(menuJson) {
+      var text = "";
+      if (menuJson && menuJson.length > 0) {
+        text += "<ul>"
+        for (var i = 0; i < menuJson.length; i++) {
+          if (menuJson[i].children && menuJson[i].children.length > 0) {
+            text += "<li class='leftul'><h3>" + menuJson[i].name + "</h3>";
+            text += getSubMenuHtmlRight(menuJson[i].children);
+          }
+          else {
+            text += "<li><h3>" + menuJson[i].name + "</h3>";
+          }
+          text += "</li>";
+        }
+        text += "</ul>";
+      }
+      return text;
+    }
+
+
+    function getNavHtmlRight(menuJson) {
+      var text = "";
+      if (menuJson && menuJson.length > 0) {
+        text += "<ul class='nav'>";//
+        for (var i = 0; i < menuJson.length; i++) {
+          text += "<li  class='leftul'><h3>" + menuJson[i].name + "</h3>";
+
+          if (menuJson[i].children && menuJson[i].children.length > 0) {
+            text += getSubMenuHtmlRight(menuJson[i].children);
+          }
+          text += "</li>";
+        }
+        text += "</ul>";
+      }
+      return text;
+    }
+
+
+
+    var textMenu = getNavHtml(topmenu);
+    document.getElementById('topMeunLeft').innerHTML = textMenu;
+    document.getElementById('topMeunRight').innerHTML = getNavHtmlRight(topmenu);
+    initMenu();
+    function initMenu() {
+      $("ul.nav li").hover(
+        function () {
+          $(this).addClass("on");
+        },
+        function () {
+          $(this).removeClass("on");
+        });
+
+
+      $("ul.nav li").hover(function () {
+        $(this).parent("ul").siblings("h3").addClass("choice");
+      },
+        function () {
+          $(this).parent("ul").siblings("h3").removeClass("choice");
+        });
+
+      if ($("ul.nav li").find("ul").html() != "") {
+        $("ul.nav li").parent("ul").siblings("h3").append("<span class='sub'></span>");
+      }
+    }
+
+  </script>
+
+  </div>
+</body>
+
+</html>
